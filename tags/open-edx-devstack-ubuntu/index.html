@@ -3,7 +3,7 @@
 <html lang="zh-cn">
     
 <head>
-    <meta charset="UTF-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Jinpeng&#39;s Blog">
     <title>标签: open edx devstack ubuntu - Jinpeng&#39;s Blog</title>
@@ -29,14 +29,14 @@
     
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
-    <!--STYLES END-->
+    <!--STYLES END--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
     
 
     
 </head>
 
     <body>
-        <div id="blog">
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
             <!-- Define author's picture -->
 
 
@@ -226,7 +226,7 @@
 <h2 id="解决googleapis的问题"><a href="#解决googleapis的问题" class="headerlink" title="解决googleapis的问题"></a>解决googleapis的问题</h2><p>由于众所周知的原因，open edX用到的fonts.googleapis.com，ajax.googleapis.com等</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/openedx/devstack</span><br><span class="line">$ grep -rl <span class="string">"ajax.googleapis.com"</span> edx-platform | xargs sudo sed -i <span class="string">'s/ajax.googleapis.com/ajax.useso.com/g'</span></span><br><span class="line">$ vagrant ssh</span><br><span class="line">$ sudo vi /edx/app/edxapp/venvs/edxapp/lib/python2.7/site-packages/debug_toolbar/settings.py</span><br></pre></td></tr></table></figure>
 <h2 id="启动Studio"><a href="#启动Studio" class="headerlink" title="启动Studio"></a>启动Studio</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/openedx/devstack</span><br><span class="line">$ vagrant ssh</span><br><span class="line">$ sudo su edxapp</span><br><span class="line">$ paver devstack studio</span><br></pre></td></tr></table></figure>
-<p>在host上打开浏览器，访问：<br><a href="http://192.168.33.10:8001/" target="_blank" rel="noopener">http://192.168.33.10:8001/</a><br>可以看到studio的登录界面，用预置账户<a href="mailto:staff@example.com" target="_blank" rel="noopener">staff@example.com</a> / edx登录。</p>
+<p>在host上打开浏览器，访问：<br><a href="http://192.168.33.10:8001/" target="_blank" rel="noopener">http://192.168.33.10:8001/</a><br>可以看到studio的登录界面，用预置账户staff@example.com / edx登录。</p>
 
                     
                         
@@ -530,5 +530,21 @@
     </script>
 
 
-    </body>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
 </html>

@@ -3,7 +3,7 @@
 <html lang="zh-cn">
     
 <head>
-    <meta charset="UTF-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Jinpeng&#39;s Blog">
     <title>Install Magento 1.9.x on Ubuntu - Jinpeng&#39;s Blog</title>
@@ -11,18 +11,18 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Dong Jinpeng","sameAs":[]},"articleBody":"##Install Magento 1.9.x on Aliyun##\n###Environment###\nAliyun, Ubuntu 14.04LTS, 101.200.167.187\n###Install LNMP###\n12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz# tar zxf lnmp1.2-full.tar.gz# cd lnmp1.2-full# vim include/mysql.sh\nAdd InnoDB engine to MySQL installation script:\n1-DWITH_INNOBASE_STORAGE_ENGINE=1\nPlease notice the section, looks like:\n123456Install_MySQL_56()&#123;...cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_READLINE=1 -DWITH_SSL=bundled -DWITH_ZLIB=system -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 $&#123;MySQL55MAOpt&#125;...&#125;\n1# ./install.sh lnmp\nMySQL root password: xxxxxMySQL 5.6.23PHP 5.6.9Memory Allocator TCMalloc(after about 1 hour build and installation)\n12345678910111213141516+------------------------------------------------------------------------+|          LNMP V1.2 for Ubuntu Linux Server, Written by Licess          |+------------------------------------------------------------------------+|         For more information please visit http://www.lnmp.org          |+------------------------------------------------------------------------+|    lnmp status manage: lnmp &#123;start|stop|reload|restart|kill|status&#125;    |+------------------------------------------------------------------------+|  phpMyAdmin: http://IP/phpmyadmin/                                     ||  phpinfo: http://IP/phpinfo.php                                        ||  Prober:  http://IP/p.php                                              |+------------------------------------------------------------------------+|  Add VirtualHost: lnmp vhost add                                       |+------------------------------------------------------------------------+|  Default directory: /home/wwwroot/default                              |+------------------------------------------------------------------------+|  MySQL/MariaDB root password: xxxxx                          |\n###Create Database###\nOpen browser http://101.200.167.187/phpmyadmin/index.phpCreate MySQL user and database:kiwitao / xxxxx (for starting from scratch)magento / xxxxx (for Sample Data)\n###Create VHost###\n1# lnmp vhost add\nVirtualhost infomation:Your domain: kiuitao.comHome Directory: /home/wwwroot/kiuitao.comRewrite: otherEnable log: yesCreate database: noCreate ftp account: no\n###Install Magento 1.9.2.4###\n123456789# wget http://www.magentocommerce.com/downloads/assets/1.9.2.4/magento-1.9.2.4.tar.gz# wget http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-sample-data-1.9.1.0.tar.gz# tar zxf magento-1.9.2.4-2016-02-23-06-04-07.tar.gz -C /home/wwwroot/kiuitao.com# cd /home/wwwroot/kiuitao.com# mv magento/* .# mv magento/.htaccess .# mv magenta/.htaccess.sample .# rmdir magento# chown -R www:www /home/wwwroot/kiuitao.com\nOpen browser http://kiuitao.com/Follow the guide on pages to finish setup, (skip Base URL check if it failed.)\nAdmin Account:kvtadmin / xxxxx\nencryption key:xxxxxxxxxx\n###Install Magento Sample Data 1.9.1.0###\n12345# tar jxf magento-sample-data-1.9.1.0.tar-2015-02-11-09-56-42.bz2# cd magento-sample-data-1.9.1.0# mysql -u magento -p -h localhost magento &lt; magento_sample_data_for_1.9.1.0.sql# cp -R media /home/wwwroot/kiuitao.com/# cp -R skin /home/wwwroot/kiuitao.com/\nOpen browser http://kiuitao.com/Follow the guide on pages to finish setup, (skip Base URL check if it failed.)\nAdmin Account:kvtadmin / xxxxx\nencryption key:xxxxxxxxxx\n","dateCreated":"2016-04-21T18:07:01+08:00","dateModified":"2018-04-24T09:16:59+08:00","datePublished":"2016-04-21T18:07:01+08:00","description":"","headline":"Install Magento 1.9.x on Ubuntu","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/"},"publisher":{"@type":"Organization","name":"Dong Jinpeng","sameAs":[]},"url":"http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/"}</script>
-    <meta name="description" content="##Install Magento 1.9.x on Aliyun## ###Environment### Aliyun, Ubuntu 14.04LTS, 101.200.167.187 ###Install LNMP### 12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz#">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Dong Jinpeng","sameAs":[]},"articleBody":"Install Magento 1.9.x on AliyunEnvironmentAliyun, Ubuntu 14.04LTS, 101.200.167.187\nInstall LNMP12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz# tar zxf lnmp1.2-full.tar.gz# cd lnmp1.2-full# vim include/mysql.sh\nAdd InnoDB engine to MySQL installation script:\n1-DWITH_INNOBASE_STORAGE_ENGINE=1\nPlease notice the section, looks like:\n123456Install_MySQL_56()&#123;...cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_READLINE=1 -DWITH_SSL=bundled -DWITH_ZLIB=system -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 $&#123;MySQL55MAOpt&#125;...&#125;\n1# ./install.sh lnmp\nMySQL root password: xxxxxMySQL 5.6.23PHP 5.6.9Memory Allocator TCMalloc(after about 1 hour build and installation)\n12345678910111213141516+------------------------------------------------------------------------+|          LNMP V1.2 for Ubuntu Linux Server, Written by Licess          |+------------------------------------------------------------------------+|         For more information please visit http://www.lnmp.org          |+------------------------------------------------------------------------+|    lnmp status manage: lnmp &#123;start|stop|reload|restart|kill|status&#125;    |+------------------------------------------------------------------------+|  phpMyAdmin: http://IP/phpmyadmin/                                     ||  phpinfo: http://IP/phpinfo.php                                        ||  Prober:  http://IP/p.php                                              |+------------------------------------------------------------------------+|  Add VirtualHost: lnmp vhost add                                       |+------------------------------------------------------------------------+|  Default directory: /home/wwwroot/default                              |+------------------------------------------------------------------------+|  MySQL/MariaDB root password: xxxxx                          |\nCreate DatabaseOpen browser http://101.200.167.187/phpmyadmin/index.phpCreate MySQL user and database:kiwitao / xxxxx (for starting from scratch)magento / xxxxx (for Sample Data)\nCreate VHost1# lnmp vhost add\nVirtualhost infomation:Your domain: kiuitao.comHome Directory: /home/wwwroot/kiuitao.comRewrite: otherEnable log: yesCreate database: noCreate ftp account: no\nInstall Magento 1.9.2.4123456789# wget http://www.magentocommerce.com/downloads/assets/1.9.2.4/magento-1.9.2.4.tar.gz# wget http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-sample-data-1.9.1.0.tar.gz# tar zxf magento-1.9.2.4-2016-02-23-06-04-07.tar.gz -C /home/wwwroot/kiuitao.com# cd /home/wwwroot/kiuitao.com# mv magento/* .# mv magento/.htaccess .# mv magenta/.htaccess.sample .# rmdir magento# chown -R www:www /home/wwwroot/kiuitao.com\nOpen browser http://kiuitao.com/Follow the guide on pages to finish setup, (skip Base URL check if it failed.)\nAdmin Account:kvtadmin / xxxxx\nencryption key:xxxxxxxxxx\nInstall Magento Sample Data 1.9.1.012345# tar jxf magento-sample-data-1.9.1.0.tar-2015-02-11-09-56-42.bz2# cd magento-sample-data-1.9.1.0# mysql -u magento -p -h localhost magento &lt; magento_sample_data_for_1.9.1.0.sql# cp -R media /home/wwwroot/kiuitao.com/# cp -R skin /home/wwwroot/kiuitao.com/\nOpen browser http://kiuitao.com/Follow the guide on pages to finish setup, (skip Base URL check if it failed.)\nAdmin Account:kvtadmin / xxxxx\nencryption key:xxxxxxxxxx\n","dateCreated":"2016-04-21T18:07:01+08:00","dateModified":"2018-04-24T09:16:59+08:00","datePublished":"2016-04-21T18:07:01+08:00","description":"","headline":"Install Magento 1.9.x on Ubuntu","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/"},"publisher":{"@type":"Organization","name":"Dong Jinpeng","sameAs":[]},"url":"http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/"}</script>
+    <meta name="description" content="Install Magento 1.9.x on AliyunEnvironmentAliyun, Ubuntu 14.04LTS, 101.200.167.187 Install LNMP12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz# tar zxf lnmp1.2-ful">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Install Magento 1.9.x on Ubuntu">
 <meta property="og:url" content="http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/index.html">
 <meta property="og:site_name" content="Jinpeng&#39;s Blog">
-<meta property="og:description" content="##Install Magento 1.9.x on Aliyun## ###Environment### Aliyun, Ubuntu 14.04LTS, 101.200.167.187 ###Install LNMP### 12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz#">
+<meta property="og:description" content="Install Magento 1.9.x on AliyunEnvironmentAliyun, Ubuntu 14.04LTS, 101.200.167.187 Install LNMP12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz# tar zxf lnmp1.2-ful">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-04-24T01:16:59.321Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install Magento 1.9.x on Ubuntu">
-<meta name="twitter:description" content="##Install Magento 1.9.x on Aliyun## ###Environment### Aliyun, Ubuntu 14.04LTS, 101.200.167.187 ###Install LNMP### 12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz#">
+<meta name="twitter:description" content="Install Magento 1.9.x on AliyunEnvironmentAliyun, Ubuntu 14.04LTS, 101.200.167.187 Install LNMP12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz# tar zxf lnmp1.2-ful">
     
     
         
@@ -33,14 +33,14 @@
     
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
-    <!--STYLES END-->
+    <!--STYLES END--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
     
 
     
 </head>
 
     <body>
-        <div id="blog">
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
             <!-- Define author's picture -->
 
 
@@ -205,11 +205,8 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>##Install Magento 1.9.x on Aliyun##</p>
-<p>###Environment###</p>
-<p>Aliyun, Ubuntu 14.04LTS, 101.200.167.187</p>
-<p>###Install LNMP###</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ssh root@101.200.167.187</span><br><span class="line"><span class="comment"># wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz</span></span><br><span class="line"><span class="comment"># tar zxf lnmp1.2-full.tar.gz</span></span><br><span class="line"><span class="comment"># cd lnmp1.2-full</span></span><br><span class="line"><span class="comment"># vim include/mysql.sh</span></span><br></pre></td></tr></table></figure>
+            <h2 id="Install-Magento-1-9-x-on-Aliyun"><a href="#Install-Magento-1-9-x-on-Aliyun" class="headerlink" title="Install Magento 1.9.x on Aliyun"></a>Install Magento 1.9.x on Aliyun</h2><h3 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h3><p>Aliyun, Ubuntu 14.04LTS, 101.200.167.187</p>
+<h3 id="Install-LNMP"><a href="#Install-LNMP" class="headerlink" title="Install LNMP"></a>Install LNMP</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ssh root@101.200.167.187</span><br><span class="line"><span class="comment"># wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz</span></span><br><span class="line"><span class="comment"># tar zxf lnmp1.2-full.tar.gz</span></span><br><span class="line"><span class="comment"># cd lnmp1.2-full</span></span><br><span class="line"><span class="comment"># vim include/mysql.sh</span></span><br></pre></td></tr></table></figure>
 <p>Add InnoDB engine to MySQL installation script:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-DWITH_INNOBASE_STORAGE_ENGINE=1</span><br></pre></td></tr></table></figure>
 <p>Please notice the section, looks like:</p>
@@ -217,18 +214,14 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ./install.sh lnmp</span></span><br></pre></td></tr></table></figure>
 <p>MySQL root password: xxxxx<br>MySQL 5.6.23<br>PHP 5.6.9<br>Memory Allocator TCMalloc<br>(after about 1 hour build and installation)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|          LNMP V1.2 for Ubuntu Linux Server, Written by Licess          |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|         For more information please visit http://www.lnmp.org          |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|    lnmp status manage: lnmp &#123;start|stop|reload|restart|kill|status&#125;    |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  phpMyAdmin: http://IP/phpmyadmin/                                     |</span><br><span class="line">|  phpinfo: http://IP/phpinfo.php                                        |</span><br><span class="line">|  Prober:  http://IP/p.php                                              |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  Add VirtualHost: lnmp vhost add                                       |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  Default directory: /home/wwwroot/default                              |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  MySQL/MariaDB root password: xxxxx                          |</span><br></pre></td></tr></table></figure>
-<p>###Create Database###</p>
-<p>Open browser <a href="http://101.200.167.187/phpmyadmin/index.php" target="_blank" rel="noopener">http://101.200.167.187/phpmyadmin/index.php</a><br>Create MySQL user and database:<br>kiwitao / xxxxx (for starting from scratch)<br>magento / xxxxx (for Sample Data)</p>
-<p>###Create VHost###</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># lnmp vhost add</span></span><br></pre></td></tr></table></figure>
+<h3 id="Create-Database"><a href="#Create-Database" class="headerlink" title="Create Database"></a>Create Database</h3><p>Open browser <a href="http://101.200.167.187/phpmyadmin/index.php" target="_blank" rel="noopener">http://101.200.167.187/phpmyadmin/index.php</a><br>Create MySQL user and database:<br>kiwitao / xxxxx (for starting from scratch)<br>magento / xxxxx (for Sample Data)</p>
+<h3 id="Create-VHost"><a href="#Create-VHost" class="headerlink" title="Create VHost"></a>Create VHost</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># lnmp vhost add</span></span><br></pre></td></tr></table></figure>
 <p>Virtualhost infomation:<br>Your domain: kiuitao.com<br>Home Directory: /home/wwwroot/kiuitao.com<br>Rewrite: other<br>Enable log: yes<br>Create database: no<br>Create ftp account: no</p>
-<p>###Install Magento 1.9.2.4###</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># wget http://www.magentocommerce.com/downloads/assets/1.9.2.4/magento-1.9.2.4.tar.gz</span><br><span class="line"># wget http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-sample-data-1.9.1.0.tar.gz</span><br><span class="line"># tar zxf magento-1.9.2.4-2016-02-23-06-04-07.tar.gz -C /home/wwwroot/kiuitao.com</span><br><span class="line"># cd /home/wwwroot/kiuitao.com</span><br><span class="line"># mv magento/* .</span><br><span class="line"># mv magento/.htaccess .</span><br><span class="line"># mv magenta/.htaccess.sample .</span><br><span class="line"># rmdir magento</span><br><span class="line"># chown -R www:www /home/wwwroot/kiuitao.com</span><br></pre></td></tr></table></figure>
+<h3 id="Install-Magento-1-9-2-4"><a href="#Install-Magento-1-9-2-4" class="headerlink" title="Install Magento 1.9.2.4"></a>Install Magento 1.9.2.4</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># wget http://www.magentocommerce.com/downloads/assets/1.9.2.4/magento-1.9.2.4.tar.gz</span><br><span class="line"># wget http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-sample-data-1.9.1.0.tar.gz</span><br><span class="line"># tar zxf magento-1.9.2.4-2016-02-23-06-04-07.tar.gz -C /home/wwwroot/kiuitao.com</span><br><span class="line"># cd /home/wwwroot/kiuitao.com</span><br><span class="line"># mv magento/* .</span><br><span class="line"># mv magento/.htaccess .</span><br><span class="line"># mv magenta/.htaccess.sample .</span><br><span class="line"># rmdir magento</span><br><span class="line"># chown -R www:www /home/wwwroot/kiuitao.com</span><br></pre></td></tr></table></figure>
 <p>Open browser <a href="http://kiuitao.com/" target="_blank" rel="noopener">http://kiuitao.com/</a><br>Follow the guide on pages to finish setup, (skip Base URL check if it failed.)</p>
 <p>Admin Account:<br>kvtadmin / xxxxx</p>
 <p>encryption key:<br>xxxxxxxxxx</p>
-<p>###Install Magento Sample Data 1.9.1.0###</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tar jxf magento-sample-data-1.9.1.0.tar-2015-02-11-09-56-42.bz2</span></span><br><span class="line"><span class="comment"># cd magento-sample-data-1.9.1.0</span></span><br><span class="line"><span class="comment"># mysql -u magento -p -h localhost magento &lt; magento_sample_data_for_1.9.1.0.sql</span></span><br><span class="line"><span class="comment"># cp -R media /home/wwwroot/kiuitao.com/</span></span><br><span class="line"><span class="comment"># cp -R skin /home/wwwroot/kiuitao.com/</span></span><br></pre></td></tr></table></figure>
+<h3 id="Install-Magento-Sample-Data-1-9-1-0"><a href="#Install-Magento-Sample-Data-1-9-1-0" class="headerlink" title="Install Magento Sample Data 1.9.1.0"></a>Install Magento Sample Data 1.9.1.0</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tar jxf magento-sample-data-1.9.1.0.tar-2015-02-11-09-56-42.bz2</span></span><br><span class="line"><span class="comment"># cd magento-sample-data-1.9.1.0</span></span><br><span class="line"><span class="comment"># mysql -u magento -p -h localhost magento &lt; magento_sample_data_for_1.9.1.0.sql</span></span><br><span class="line"><span class="comment"># cp -R media /home/wwwroot/kiuitao.com/</span></span><br><span class="line"><span class="comment"># cp -R skin /home/wwwroot/kiuitao.com/</span></span><br></pre></td></tr></table></figure>
 <p>Open browser <a href="http://kiuitao.com/" target="_blank" rel="noopener">http://kiuitao.com/</a><br>Follow the guide on pages to finish setup, (skip Base URL check if it failed.)</p>
 <p>Admin Account:<br>kvtadmin / xxxxx</p>
 <p>encryption key:<br>xxxxxxxxxx</p>
@@ -265,7 +258,7 @@
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
@@ -299,7 +292,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -351,7 +344,7 @@
     </nav>
     <ul class="post-actions post-action-share">
         <li class="post-action hide-lg hide-md hide-sm">
-            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Diesen Beitrag teilen">
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
         </li>
@@ -385,7 +378,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -695,5 +688,21 @@
     </script>
 
 
-    </body>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
 </html>

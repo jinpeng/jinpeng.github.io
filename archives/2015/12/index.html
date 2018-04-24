@@ -3,7 +3,7 @@
 <html lang="zh-cn">
     
 <head>
-    <meta charset="UTF-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Jinpeng&#39;s Blog">
     <title>归档: 2015/12 - Jinpeng&#39;s Blog</title>
@@ -29,14 +29,14 @@
     
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
-    <!--STYLES END-->
+    <!--STYLES END--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
     
 
     
 </head>
 
     <body>
-        <div id="blog">
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
             <!-- Define author's picture -->
 
 
@@ -226,7 +226,7 @@
 <li>Each arithmetic and logical operator has corresponding assignment operator, like +=, *=.</li>
 <li>Arithemtic operator + could concatenate two strings.</li>
 <li>Short variable declaration i := 1.</li>
-<li>Increment and decrement statements i++/i– are statements, not expressions in C-like languages, and are only postfix. So j = i++ or ++i are both illegal.</li>
+<li>Increment and decrement statements i++/i— are statements, not expressions in C-like languages, and are only postfix. So j = i++ or ++i are both illegal.</li>
 <li><p>for loop has several forms:</p>
 <pre><code>for initialization; condition; post {
 }
@@ -259,16 +259,16 @@ var string = &quot;&quot;   // used when variable type and intial value type are
 <li>The order of map iteration is intentional random.</li>
 <li>bufio.Scanner is the most useful feature for input/output.</li>
 <li><p>fmt.Printf</p>
-<pre><code>%d                decimal integer
-%x, %o, %b        hexadecimal, octal, binary
-%f, %g, %e        floating point number
-%t                boolean
-%c                rune(Unicode code point)
-%s                string
-%q                quoted string &quot;abc&quot; or rune &apos;c&apos;
-%v                any value in natural format
-%T                type of any value
-%%                literal percent sign(no operand)
+<pre><code> %d                decimal integer
+ %x, %o, %b        hexadecimal, octal, binary
+ %f, %g, %e        floating point number
+ %t                boolean
+ %c                rune(Unicode code point)
+ %s                string
+ %q                quoted string &quot;abc&quot; or rune &#39;c&#39;
+ %v                any value in natural format
+ %T                type of any value
+ %%                literal percent sign(no operand)
 </code></pre></li>
 <li><p>escape sequences: \t \n</p>
 </li>
@@ -310,7 +310,7 @@ var string = &quot;&quot;   // used when variable type and intial value type are
 <li>Control flow: if, for, switch. </li>
 <li>Switch cases do not fall through from one to the next as C-like languages. fallthrough overrides this behavior. default case is optional.</li>
 <li>A switch does not need an operand. It is called tagless switch. It is equivalent to switch true.</li>
-<li>Switch may include an optional simple statement–a short variable declaration, an increment or assignment statement, or function call–that can be used to set a value before it is tested.</li>
+<li>Switch may include an optional simple statement—a short variable declaration, an increment or assignment statement, or function call—that can be used to set a value before it is tested.</li>
 <li>The break and continue statements modify the flow of control. Statements may be labeled so that break and continue can refer to them.</li>
 <li>The goto statement is intended for machine-generated code.</li>
 <li>Named types: A type declaration makes it possible to give a name to an existing type.</li>
@@ -624,5 +624,21 @@ var string = &quot;&quot;   // used when variable type and intial value type are
     </script>
 
 
-    </body>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
 </html>
