@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jinpeng&#39;s Blog">
+    <title>Open edX devstack on Ubuntu host - Jinpeng&#39;s Blog</title>
+    <meta name="author" content="Dong Jinpeng">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Dong Jinpeng","sameAs":[]},"articleBody":"Open edX Devstack Ubuntu host安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450.\n安装VirtualBox和Vagrant1$ sudo vi /etc/apt/sources.list\n在文档最后添加VirtualBox源：1deb http://download.virtualbox.org/virtualbox/debian trusty contrib\n123$ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -$ sudo apt-get update$ sudo apt-get install virtualbox-5.0\n12$ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb$ sudo dpkg -i vagrant_1.8.1_x86_64.deb\n安装Vagrant plugins，vagrant-vbguest等。修改Vagrant所用Ruby gems服务器为淘宝的镜像： \n123$ grep -rl \"https://rubygems.org\" /opt/vagrant/embedded/gems/ | xargs sudo sed -i 's/https\\:\\/\\/rubygems.org/https\\:\\/\\/ruby.taobao.org/g'$ grep -rl \"https://rubygems.org\" /opt/vagrant/embedded/gems/$ vagrant plugin install vagrant-vbguest\n导入provision好的devstack box安装配置sftp server，用于传输文件，也可以用其它方式。\n123456789101112$ sudo apt-get install openssh-server$ sudo addgroup sftp-users$ sudo adduser alice$ sudo usermod -G sftp-users -s /bin/false alice$ sudo addgroup ssh-users$ sudo usermod -a -G ssh-users jinpeng$ sudo mkdir /home/sftp_root$ sudo mkdir /home/sftp_root/shared$ sudo chown jinpeng:sftp-users /home/sftp_root/shared$ sudo chmod 770 /home/sftp_root/shared$ sudo vi /etc/ssh/sshd_config $ sudo reboot now\n其中在sshd_config中最后面添加以下内容：\n123456AllowGroups ssh-users sftp-usersMatch Group sftp-users    ChrootDirectory /home/sftp_root    AllowTcpForwarding no    X11Forwarding no    ForceCommand internal-sftp\n生成ssh key，在devstack的Vagranfile中使用到：  \n12$ mkdir ~/.ssh$ ssh-keygen\n安装NFS服务：  \n1$ sudo apt-get install nfs-common nfs-kernel-server\n导入provision好的devstack box:   \n1$ vagrant box add dogwood-devstack-provisioned ~/Download/devstack_mac.box\n启动虚拟机启动虚拟机：  \n12345$ mkdir ~/openedx$ cd openedx$ git clone https://github.com/jinpeng/openedx/devstack$ cd devstack$ vagrant up\n如果遇到ssh authentication问题：  \n12$ ssh-copy-id vagrant@192.168.33.10$ vagrant reload\n解决googleapis的问题由于众所周知的原因，open edX用到的fonts.googleapis.com，ajax.googleapis.com等\n1234$ cd ~/openedx/devstack$ grep -rl \"ajax.googleapis.com\" edx-platform | xargs sudo sed -i 's/ajax.googleapis.com/ajax.useso.com/g'$ vagrant ssh$ sudo vi /edx/app/edxapp/venvs/edxapp/lib/python2.7/site-packages/debug_toolbar/settings.py\n启动Studio1234$ cd ~/openedx/devstack$ vagrant ssh$ sudo su edxapp$ paver devstack studio\n在host上打开浏览器，访问：http://192.168.33.10:8001/可以看到studio的登录界面，用预置账户staff@example.com / edx登录。\n","dateCreated":"2016-04-21T17:47:25+08:00","dateModified":"2018-04-24T09:16:59+08:00","datePublished":"2016-04-21T17:47:25+08:00","description":"","headline":"Open edX devstack on Ubuntu host","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/"},"publisher":{"@type":"Organization","name":"Dong Jinpeng","sameAs":[]},"url":"http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/","keywords":"open edx devstack ubuntu"}</script>
+    <meta name="description" content="Open edX Devstack Ubuntu host安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450. 安装VirtualBox和Vagrant1$ sudo vi /etc/apt/sources.list 在文档最后添加VirtualBox源：1deb http://download.virtualbox.org/virtualbox/debian">
+<meta name="keywords" content="open edx devstack ubuntu">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Open edX devstack on Ubuntu host">
+<meta property="og:url" content="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/index.html">
+<meta property="og:site_name" content="Jinpeng&#39;s Blog">
+<meta property="og:description" content="Open edX Devstack Ubuntu host安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450. 安装VirtualBox和Vagrant1$ sudo vi /etc/apt/sources.list 在文档最后添加VirtualBox源：1deb http://download.virtualbox.org/virtualbox/debian">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-04-24T01:16:59.325Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Open edX devstack on Ubuntu host">
+<meta name="twitter:description" content="Open edX Devstack Ubuntu host安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450. 安装VirtualBox和Vagrant1$ sudo vi /etc/apt/sources.list 在文档最后添加VirtualBox源：1deb http://download.virtualbox.org/virtualbox/debian">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jinpeng&#39;s Blog</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="分类"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Open edX devstack on Ubuntu host
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2016-04-21T17:47:25+08:00">
+	
+		    4月 21, 2016
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h1 id="Open-edX-Devstack-Ubuntu-host"><a href="#Open-edX-Devstack-Ubuntu-host" class="headerlink" title="Open edX Devstack Ubuntu host"></a>Open edX Devstack Ubuntu host</h1><p>安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450.</p>
+<h2 id="安装VirtualBox和Vagrant"><a href="#安装VirtualBox和Vagrant" class="headerlink" title="安装VirtualBox和Vagrant"></a>安装VirtualBox和Vagrant</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vi /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<p>在文档最后添加VirtualBox源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://download.virtualbox.org/virtualbox/debian trusty contrib</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -</span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install virtualbox-5.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb</span><br><span class="line">$ sudo dpkg -i vagrant_1.8.1_x86_64.deb</span><br></pre></td></tr></table></figure>
+<p>安装Vagrant plugins，vagrant-vbguest等。<br>修改Vagrant所用Ruby gems服务器为淘宝的镜像： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ grep -rl <span class="string">"https://rubygems.org"</span> /opt/vagrant/embedded/gems/ | xargs sudo sed -i <span class="string">'s/https\:\/\/rubygems.org/https\:\/\/ruby.taobao.org/g'</span></span><br><span class="line">$ grep -rl <span class="string">"https://rubygems.org"</span> /opt/vagrant/embedded/gems/</span><br><span class="line">$ vagrant plugin install vagrant-vbguest</span><br></pre></td></tr></table></figure>
+<h2 id="导入provision好的devstack-box"><a href="#导入provision好的devstack-box" class="headerlink" title="导入provision好的devstack box"></a>导入provision好的devstack box</h2><p>安装配置sftp server，用于传输文件，也可以用其它方式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install openssh-server</span><br><span class="line">$ sudo addgroup sftp-users</span><br><span class="line">$ sudo adduser alice</span><br><span class="line">$ sudo usermod -G sftp-users -s /bin/<span class="literal">false</span> alice</span><br><span class="line">$ sudo addgroup ssh-users</span><br><span class="line">$ sudo usermod -a -G ssh-users jinpeng</span><br><span class="line">$ sudo mkdir /home/sftp_root</span><br><span class="line">$ sudo mkdir /home/sftp_root/shared</span><br><span class="line">$ sudo chown jinpeng:sftp-users /home/sftp_root/shared</span><br><span class="line">$ sudo chmod 770 /home/sftp_root/shared</span><br><span class="line">$ sudo vi /etc/ssh/sshd_config </span><br><span class="line">$ sudo reboot now</span><br></pre></td></tr></table></figure>
+<p>其中在sshd_config中最后面添加以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AllowGroups ssh-users sftp-users</span><br><span class="line">Match Group sftp-users</span><br><span class="line">    ChrootDirectory /home/sftp_root</span><br><span class="line">    AllowTcpForwarding no</span><br><span class="line">    X11Forwarding no</span><br><span class="line">    ForceCommand internal-sftp</span><br></pre></td></tr></table></figure>
+<p>生成ssh key，在devstack的Vagranfile中使用到：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir ~/.ssh</span><br><span class="line">$ ssh-keygen</span><br></pre></td></tr></table></figure>
+<p>安装NFS服务：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install nfs-common nfs-kernel-server</span><br></pre></td></tr></table></figure>
+<p>导入provision好的devstack box:   </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant box add dogwood-devstack-provisioned ~/Download/devstack_mac.box</span><br></pre></td></tr></table></figure>
+<h2 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h2><p>启动虚拟机：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir ~/openedx</span><br><span class="line">$ <span class="built_in">cd</span> openedx</span><br><span class="line">$ git <span class="built_in">clone</span> https://github.com/jinpeng/openedx/devstack</span><br><span class="line">$ <span class="built_in">cd</span> devstack</span><br><span class="line">$ vagrant up</span><br></pre></td></tr></table></figure>
+<p>如果遇到ssh authentication问题：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-copy-id vagrant@192.168.33.10</span><br><span class="line">$ vagrant reload</span><br></pre></td></tr></table></figure>
+<h2 id="解决googleapis的问题"><a href="#解决googleapis的问题" class="headerlink" title="解决googleapis的问题"></a>解决googleapis的问题</h2><p>由于众所周知的原因，open edX用到的fonts.googleapis.com，ajax.googleapis.com等</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/openedx/devstack</span><br><span class="line">$ grep -rl <span class="string">"ajax.googleapis.com"</span> edx-platform | xargs sudo sed -i <span class="string">'s/ajax.googleapis.com/ajax.useso.com/g'</span></span><br><span class="line">$ vagrant ssh</span><br><span class="line">$ sudo vi /edx/app/edxapp/venvs/edxapp/lib/python2.7/site-packages/debug_toolbar/settings.py</span><br></pre></td></tr></table></figure>
+<h2 id="启动Studio"><a href="#启动Studio" class="headerlink" title="启动Studio"></a>启动Studio</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/openedx/devstack</span><br><span class="line">$ vagrant ssh</span><br><span class="line">$ sudo su edxapp</span><br><span class="line">$ paver devstack studio</span><br></pre></td></tr></table></figure>
+<p>在host上打开浏览器，访问：<br><a href="http://192.168.33.10:8001/" target="_blank" rel="noopener">http://192.168.33.10:8001/</a><br>可以看到studio的登录界面，用预置账户<a href="mailto:staff@example.com" target="_blank" rel="noopener">staff@example.com</a> / edx登录。</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/open-edx-devstack-ubuntu/">open edx devstack ubuntu</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/桃花庵歌/" data-tooltip="桃花庵歌" aria-label="上一篇: 桃花庵歌">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/12/17/Go-Programming-Lanauges-Reading-Notes-Chapter-1/" data-tooltip="Go Programming Lanauges Reading Notes Chapter 1" aria-label="下一篇: Go Programming Lanauges Reading Notes Chapter 1">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Dong Jinpeng. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/桃花庵歌/" data-tooltip="桃花庵歌" aria-label="上一篇: 桃花庵歌">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/12/17/Go-Programming-Lanauges-Reading-Notes-Chapter-1/" data-tooltip="Go Programming Lanauges Reading Notes Chapter 1" aria-label="下一篇: Go Programming Lanauges Reading Notes Chapter 1">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Dong Jinpeng</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">没有找到文章</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/08/28/hello-world/">
+                            <h3 class="media-heading">Hello World</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年8月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/08/28/Greek-Alphabet/">
+                            <h3 class="media-heading">Greek Alphabet</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年8月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/12/17/Go-Programming-Lanauges-Reading-Notes-Chapter-1/">
+                            <h3 class="media-heading">Go Programming Lanauges Reading Notes Chapter 1</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年12月17日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/">
+                            <h3 class="media-heading">Open edX devstack on Ubuntu host</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/桃花庵歌/">
+                            <h3 class="media-heading">桃花庵歌</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/">
+                            <h3 class="media-heading">Install Magento 1.9.x on Ubuntu</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/">
+                            <h3 class="media-heading">Open edX devstack on Ubuntu without Vagrant</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/28/Open-edX-Analytics-devstack-on-Ubuntu-without-Vagrant/">
+                            <h3 class="media-heading">Open edX Analytics devstack on Ubuntu without Vagrant</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/06/01/Python-debug-with-PDB/">
+                            <h3 class="media-heading">Python debug with PDB</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年6月1日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/08/19/Install-Tensorflow-on-Ubuntu-16-04-with-NVidia-GPU-accelerating/">
+                            <h3 class="media-heading">Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年8月19日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="没有找到文章"
+                data-message-one="找到 1 篇文章"
+                data-message-other="找到 {n} 篇文章">
+                找到 12 篇文章
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-yhuo2grt8r7qkqumzgjoglkfbicl1thukjgmla6jopu56zpcowfedi5zjcor.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('10EH72KECT', 'a366c3ad0701974d30e9be2a4847fd11');
+        var algoliaIndex = algoliaClient.initIndex('jp-hexo-blog');
+    </script>
+
+
+    </body>
+</html>

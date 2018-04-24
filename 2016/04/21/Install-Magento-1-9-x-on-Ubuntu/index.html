@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jinpeng&#39;s Blog">
+    <title>Install Magento 1.9.x on Ubuntu - Jinpeng&#39;s Blog</title>
+    <meta name="author" content="Dong Jinpeng">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Dong Jinpeng","sameAs":[]},"articleBody":"##Install Magento 1.9.x on Aliyun##\n###Environment###\nAliyun, Ubuntu 14.04LTS, 101.200.167.187\n###Install LNMP###\n12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz# tar zxf lnmp1.2-full.tar.gz# cd lnmp1.2-full# vim include/mysql.sh\nAdd InnoDB engine to MySQL installation script:\n1-DWITH_INNOBASE_STORAGE_ENGINE=1\nPlease notice the section, looks like:\n123456Install_MySQL_56()&#123;...cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_READLINE=1 -DWITH_SSL=bundled -DWITH_ZLIB=system -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 $&#123;MySQL55MAOpt&#125;...&#125;\n1# ./install.sh lnmp\nMySQL root password: xxxxxMySQL 5.6.23PHP 5.6.9Memory Allocator TCMalloc(after about 1 hour build and installation)\n12345678910111213141516+------------------------------------------------------------------------+|          LNMP V1.2 for Ubuntu Linux Server, Written by Licess          |+------------------------------------------------------------------------+|         For more information please visit http://www.lnmp.org          |+------------------------------------------------------------------------+|    lnmp status manage: lnmp &#123;start|stop|reload|restart|kill|status&#125;    |+------------------------------------------------------------------------+|  phpMyAdmin: http://IP/phpmyadmin/                                     ||  phpinfo: http://IP/phpinfo.php                                        ||  Prober:  http://IP/p.php                                              |+------------------------------------------------------------------------+|  Add VirtualHost: lnmp vhost add                                       |+------------------------------------------------------------------------+|  Default directory: /home/wwwroot/default                              |+------------------------------------------------------------------------+|  MySQL/MariaDB root password: xxxxx                          |\n###Create Database###\nOpen browser http://101.200.167.187/phpmyadmin/index.phpCreate MySQL user and database:kiwitao / xxxxx (for starting from scratch)magento / xxxxx (for Sample Data)\n###Create VHost###\n1# lnmp vhost add\nVirtualhost infomation:Your domain: kiuitao.comHome Directory: /home/wwwroot/kiuitao.comRewrite: otherEnable log: yesCreate database: noCreate ftp account: no\n###Install Magento 1.9.2.4###\n123456789# wget http://www.magentocommerce.com/downloads/assets/1.9.2.4/magento-1.9.2.4.tar.gz# wget http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-sample-data-1.9.1.0.tar.gz# tar zxf magento-1.9.2.4-2016-02-23-06-04-07.tar.gz -C /home/wwwroot/kiuitao.com# cd /home/wwwroot/kiuitao.com# mv magento/* .# mv magento/.htaccess .# mv magenta/.htaccess.sample .# rmdir magento# chown -R www:www /home/wwwroot/kiuitao.com\nOpen browser http://kiuitao.com/Follow the guide on pages to finish setup, (skip Base URL check if it failed.)\nAdmin Account:kvtadmin / xxxxx\nencryption key:xxxxxxxxxx\n###Install Magento Sample Data 1.9.1.0###\n12345# tar jxf magento-sample-data-1.9.1.0.tar-2015-02-11-09-56-42.bz2# cd magento-sample-data-1.9.1.0# mysql -u magento -p -h localhost magento &lt; magento_sample_data_for_1.9.1.0.sql# cp -R media /home/wwwroot/kiuitao.com/# cp -R skin /home/wwwroot/kiuitao.com/\nOpen browser http://kiuitao.com/Follow the guide on pages to finish setup, (skip Base URL check if it failed.)\nAdmin Account:kvtadmin / xxxxx\nencryption key:xxxxxxxxxx\n","dateCreated":"2016-04-21T18:07:01+08:00","dateModified":"2018-04-24T09:16:59+08:00","datePublished":"2016-04-21T18:07:01+08:00","description":"","headline":"Install Magento 1.9.x on Ubuntu","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/"},"publisher":{"@type":"Organization","name":"Dong Jinpeng","sameAs":[]},"url":"http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/"}</script>
+    <meta name="description" content="##Install Magento 1.9.x on Aliyun## ###Environment### Aliyun, Ubuntu 14.04LTS, 101.200.167.187 ###Install LNMP### 12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz#">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Install Magento 1.9.x on Ubuntu">
+<meta property="og:url" content="http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/index.html">
+<meta property="og:site_name" content="Jinpeng&#39;s Blog">
+<meta property="og:description" content="##Install Magento 1.9.x on Aliyun## ###Environment### Aliyun, Ubuntu 14.04LTS, 101.200.167.187 ###Install LNMP### 12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz#">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-04-24T01:16:59.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Install Magento 1.9.x on Ubuntu">
+<meta name="twitter:description" content="##Install Magento 1.9.x on Aliyun## ###Environment### Aliyun, Ubuntu 14.04LTS, 101.200.167.187 ###Install LNMP### 12345$ ssh root@101.200.167.187# wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz#">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jinpeng&#39;s Blog</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="分类"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Install Magento 1.9.x on Ubuntu
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2016-04-21T18:07:01+08:00">
+	
+		    4月 21, 2016
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>##Install Magento 1.9.x on Aliyun##</p>
+<p>###Environment###</p>
+<p>Aliyun, Ubuntu 14.04LTS, 101.200.167.187</p>
+<p>###Install LNMP###</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ssh root@101.200.167.187</span><br><span class="line"><span class="comment"># wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz</span></span><br><span class="line"><span class="comment"># tar zxf lnmp1.2-full.tar.gz</span></span><br><span class="line"><span class="comment"># cd lnmp1.2-full</span></span><br><span class="line"><span class="comment"># vim include/mysql.sh</span></span><br></pre></td></tr></table></figure>
+<p>Add InnoDB engine to MySQL installation script:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-DWITH_INNOBASE_STORAGE_ENGINE=1</span><br></pre></td></tr></table></figure>
+<p>Please notice the section, looks like:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Install_MySQL_56()</span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">cmake -DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span>/mysql -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_READLINE=1 -DWITH_SSL=bundled -DWITH_ZLIB=system -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 <span class="variable">$&#123;MySQL55MAOpt&#125;</span></span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ./install.sh lnmp</span></span><br></pre></td></tr></table></figure>
+<p>MySQL root password: xxxxx<br>MySQL 5.6.23<br>PHP 5.6.9<br>Memory Allocator TCMalloc<br>(after about 1 hour build and installation)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|          LNMP V1.2 for Ubuntu Linux Server, Written by Licess          |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|         For more information please visit http://www.lnmp.org          |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|    lnmp status manage: lnmp &#123;start|stop|reload|restart|kill|status&#125;    |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  phpMyAdmin: http://IP/phpmyadmin/                                     |</span><br><span class="line">|  phpinfo: http://IP/phpinfo.php                                        |</span><br><span class="line">|  Prober:  http://IP/p.php                                              |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  Add VirtualHost: lnmp vhost add                                       |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  Default directory: /home/wwwroot/default                              |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">|  MySQL/MariaDB root password: xxxxx                          |</span><br></pre></td></tr></table></figure>
+<p>###Create Database###</p>
+<p>Open browser <a href="http://101.200.167.187/phpmyadmin/index.php" target="_blank" rel="noopener">http://101.200.167.187/phpmyadmin/index.php</a><br>Create MySQL user and database:<br>kiwitao / xxxxx (for starting from scratch)<br>magento / xxxxx (for Sample Data)</p>
+<p>###Create VHost###</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># lnmp vhost add</span></span><br></pre></td></tr></table></figure>
+<p>Virtualhost infomation:<br>Your domain: kiuitao.com<br>Home Directory: /home/wwwroot/kiuitao.com<br>Rewrite: other<br>Enable log: yes<br>Create database: no<br>Create ftp account: no</p>
+<p>###Install Magento 1.9.2.4###</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># wget http://www.magentocommerce.com/downloads/assets/1.9.2.4/magento-1.9.2.4.tar.gz</span><br><span class="line"># wget http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-sample-data-1.9.1.0.tar.gz</span><br><span class="line"># tar zxf magento-1.9.2.4-2016-02-23-06-04-07.tar.gz -C /home/wwwroot/kiuitao.com</span><br><span class="line"># cd /home/wwwroot/kiuitao.com</span><br><span class="line"># mv magento/* .</span><br><span class="line"># mv magento/.htaccess .</span><br><span class="line"># mv magenta/.htaccess.sample .</span><br><span class="line"># rmdir magento</span><br><span class="line"># chown -R www:www /home/wwwroot/kiuitao.com</span><br></pre></td></tr></table></figure>
+<p>Open browser <a href="http://kiuitao.com/" target="_blank" rel="noopener">http://kiuitao.com/</a><br>Follow the guide on pages to finish setup, (skip Base URL check if it failed.)</p>
+<p>Admin Account:<br>kvtadmin / xxxxx</p>
+<p>encryption key:<br>xxxxxxxxxx</p>
+<p>###Install Magento Sample Data 1.9.1.0###</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tar jxf magento-sample-data-1.9.1.0.tar-2015-02-11-09-56-42.bz2</span></span><br><span class="line"><span class="comment"># cd magento-sample-data-1.9.1.0</span></span><br><span class="line"><span class="comment"># mysql -u magento -p -h localhost magento &lt; magento_sample_data_for_1.9.1.0.sql</span></span><br><span class="line"><span class="comment"># cp -R media /home/wwwroot/kiuitao.com/</span></span><br><span class="line"><span class="comment"># cp -R skin /home/wwwroot/kiuitao.com/</span></span><br></pre></td></tr></table></figure>
+<p>Open browser <a href="http://kiuitao.com/" target="_blank" rel="noopener">http://kiuitao.com/</a><br>Follow the guide on pages to finish setup, (skip Base URL check if it failed.)</p>
+<p>Admin Account:<br>kvtadmin / xxxxx</p>
+<p>encryption key:<br>xxxxxxxxxx</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" data-tooltip="Open edX devstack on Ubuntu without Vagrant" aria-label="上一篇: Open edX devstack on Ubuntu without Vagrant">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/桃花庵歌/" data-tooltip="桃花庵歌" aria-label="下一篇: 桃花庵歌">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Dong Jinpeng. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" data-tooltip="Open edX devstack on Ubuntu without Vagrant" aria-label="上一篇: Open edX devstack on Ubuntu without Vagrant">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/桃花庵歌/" data-tooltip="桃花庵歌" aria-label="下一篇: 桃花庵歌">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Dong Jinpeng</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">没有找到文章</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/08/28/hello-world/">
+                            <h3 class="media-heading">Hello World</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年8月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/08/28/Greek-Alphabet/">
+                            <h3 class="media-heading">Greek Alphabet</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年8月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/12/17/Go-Programming-Lanauges-Reading-Notes-Chapter-1/">
+                            <h3 class="media-heading">Go Programming Lanauges Reading Notes Chapter 1</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年12月17日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/">
+                            <h3 class="media-heading">Open edX devstack on Ubuntu host</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/桃花庵歌/">
+                            <h3 class="media-heading">桃花庵歌</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/">
+                            <h3 class="media-heading">Install Magento 1.9.x on Ubuntu</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/">
+                            <h3 class="media-heading">Open edX devstack on Ubuntu without Vagrant</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/28/Open-edX-Analytics-devstack-on-Ubuntu-without-Vagrant/">
+                            <h3 class="media-heading">Open edX Analytics devstack on Ubuntu without Vagrant</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/06/01/Python-debug-with-PDB/">
+                            <h3 class="media-heading">Python debug with PDB</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年6月1日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/08/19/Install-Tensorflow-on-Ubuntu-16-04-with-NVidia-GPU-accelerating/">
+                            <h3 class="media-heading">Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年8月19日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="没有找到文章"
+                data-message-one="找到 1 篇文章"
+                data-message-other="找到 {n} 篇文章">
+                找到 12 篇文章
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-yhuo2grt8r7qkqumzgjoglkfbicl1thukjgmla6jopu56zpcowfedi5zjcor.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('10EH72KECT', 'a366c3ad0701974d30e9be2a4847fd11');
+        var algoliaIndex = algoliaClient.initIndex('jp-hexo-blog');
+    </script>
+
+
+    </body>
+</html>

@@ -1,0 +1,687 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jinpeng&#39;s Blog">
+    <title>Open edX devstack on Ubuntu without Vagrant - Jinpeng&#39;s Blog</title>
+    <meta name="author" content="Dong Jinpeng">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Dong Jinpeng","sameAs":[]},"articleBody":"Install open edX devstack on Ubuntu 14.04 directlyLaunch EC2 instance with 2 vCPUs 4G memory\n1234$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211$ sudo apt-get update -y$ sudo apt-get upgrade -y$ sudo reboot\n12345678910$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211$ export OPENEDX_RELEASE=named-release/dogwood$ wget https://raw.githubusercontent.com/edx/configuration/master/util/install/ansible-bootstrap.sh$ chmod +x ansible-bootstrap.sh$ sudo ./ansible-bootstrap.sh$ grep -rl \"vagrant\" /edx/app/edx_ansible/edx_ansible/playbooks/roles/local_dev/$ grep -rl \"vagrant\" /edx/app/edx_ansible/edx_ansible/playbooks/roles/local_dev/ | xargs sudo sed -i 's/vagrant/ubuntu/g'$ sudo sed -i '/edxapp_user: edxapp/ a\\edxapp_ruby_version: \"1.9.3-p551\"' /edx/app/edx_ansible/edx_ansible/playbooks/roles/edxapp/defaults/main.yml$ sudo sed -i '/- name: git checkout edx_ansible repo into edx_ansible_code_dir/ a\\  ignore_errors: yes' /edx/app/edx_ansible/edx_ansible/playbooks/roles/edx_ansible/tasks/deploy.yml$ sudo sed -i '/- edxapp_common/ a\\  - role: rbenv\\n    rbenv_user: \"&#123;&#123; edxapp_user &#125;&#125;\"\\n    rbenv_dir: \"&#123;&#123; edxapp_app_dir &#125;&#125;\"\\n    rbenv_ruby_version: \"&#123;&#123; edxapp_ruby_version &#125;&#125;\"' /edx/app/edx_ansible/edx_ansible/playbooks/roles/edxapp/meta/main.yml\n1$ vim devstack.sh\n1234567891011121314151617181920212223242526272829303132#!/bin/bashif [ ! -d /edx/app/edx_ansible ]; then    echo \"Error: Base box is missing provisioning scripts.\" 1&gt;&amp;2    exit 1fiOPENEDX_RELEASE=named-release/dogwoodexport PYTHONUNBUFFERED=1source /edx/app/edx_ansible/venvs/edx_ansible/bin/activateexport PIP_REQUIRE_VIRTUALENV=trueexport PIP_RESPECT_VIRTUALENV=truecd /edx/app/edx_ansible/edx_ansible/playbooks# Did we specify an openedx release?if [ -n \"$OPENEDX_RELEASE\" ]; then  EXTRA_VARS=\"-e edx_platform_version=$OPENEDX_RELEASE \\    -e certs_version=$OPENEDX_RELEASE \\    -e forum_version=$OPENEDX_RELEASE \\    -e xqueue_version=$OPENEDX_RELEASE \\  \"  CONFIG_VER=$OPENEDX_RELEASE  # Need to ensure that the configuration repo is updated  # The vagrant-devstack.yml playbook will also do this, but only  # after loading the playbooks into memory.  If these are out of date,  # this can cause problems (e.g. looking for templates that no longer exist).  /edx/bin/update configuration $CONFIG_VERelse  CONFIG_VER=\"master\"fiansible-playbook -i localhost, -c local run_role.yml -e role=edx_ansible -e configuration_version=$CONFIG_VER $EXTRA_VARSansible-playbook -i localhost, -c local vagrant-devstack.yml -e configuration_version=$CONFIG_VER $EXTRA_VARS\n12$ chmod +x devstack.sh$ sudo ./devstack.sh\nAfter installation, try to run studio:\n12$ sudo su edxapp$ paver devstack studio\nFaild due to bundle not installed, looks like Ruby/Gems/Bundle files installed under /edx/app/edxapp/.gems, but not installed properly. Then reinstall them.\nSet edxapp user environment varibles, execute following commands as ubuntu user.\n123$ sudo sed -i '/SKIP_WS_MIGRATIONS=\"1\"/ a\\export GEM_HOME=\"/edx/app/edxapp/.gem\"\\nexport CONFIG_ROOT=\"/edx/app/edxapp\"\\nexport GEM_PATH=\"/edx/app/edxapp/.gem\"\\nexport RBENV_ROOT=\"/edx/app/edxapp/.rbenv\"' /edx/app/edxapp/edxapp_env$ sudo sed -i '/export PATH=/ c\\export PATH=\"/edx/app/edxapp/venvs/edxapp/bin:/edx/app/edxapp/edx-platform/bin:/edx/app/edxapp/.rbenv/bin:/edx/app/edxapp/.rbenv/shims:/edx/app/edxapp/.gem/bin:/edx/app/edxapp/edx-platform/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"' /edx/app/edxapp/edxapp_env$ sudo sed -i '/1.9.3/ c\\1.9.3-p551' /edx/app/edxapp/edx-platform/.ruby-version\nThe following commands executed with user edxapp, refer to steps in /edx/app/edx_ansible/edx_ansible/playbooks/roles/rbenv/tasks/main.yml.\n12345678$ sudo su edxapp$ rbenv versions | grep 1.9.3-p551$ rbenv install 1.9.3-p551$ rbenv global 1.9.3-p551$ gem install bundler -v 1.11.2$ gem install rake -v 10.4.2$ gem install rubygems-update &amp;&amp; update_rubygems$ rbenv rehash\nThen run studio again, it works but could not be accessed from remote, the firewall of EC2 blocked the inbound request. Just add new rule with port 8001 to security group, then everything looks fine.\nTo run studio without pip install requirements every time, set environment varible:1export NO_PREREQ_INSTALL=True\n","dateCreated":"2016-04-21T18:21:33+08:00","dateModified":"2018-04-24T09:16:59+08:00","datePublished":"2016-04-21T18:21:33+08:00","description":"","headline":"Open edX devstack on Ubuntu without Vagrant","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/"},"publisher":{"@type":"Organization","name":"Dong Jinpeng","sameAs":[]},"url":"http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/"}</script>
+    <meta name="description" content="Install open edX devstack on Ubuntu 14.04 directlyLaunch EC2 instance with 2 vCPUs 4G memory 1234$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211$ sudo apt-get update -y$ sudo apt-get upgrade -y$ sudo r">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Open edX devstack on Ubuntu without Vagrant">
+<meta property="og:url" content="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/index.html">
+<meta property="og:site_name" content="Jinpeng&#39;s Blog">
+<meta property="og:description" content="Install open edX devstack on Ubuntu 14.04 directlyLaunch EC2 instance with 2 vCPUs 4G memory 1234$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211$ sudo apt-get update -y$ sudo apt-get upgrade -y$ sudo r">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-04-24T01:16:59.325Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Open edX devstack on Ubuntu without Vagrant">
+<meta name="twitter:description" content="Install open edX devstack on Ubuntu 14.04 directlyLaunch EC2 instance with 2 vCPUs 4G memory 1234$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211$ sudo apt-get update -y$ sudo apt-get upgrade -y$ sudo r">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-1udptkpril81ozu8ifd8zpujn7ipu7lefxsiu5gxx0dpnzntdx6dusvki3ao.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jinpeng&#39;s Blog</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="分类"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Open edX devstack on Ubuntu without Vagrant
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2016-04-21T18:21:33+08:00">
+	
+		    4月 21, 2016
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h2 id="Install-open-edX-devstack-on-Ubuntu-14-04-directly"><a href="#Install-open-edX-devstack-on-Ubuntu-14-04-directly" class="headerlink" title="Install open edX devstack on Ubuntu 14.04 directly"></a>Install open edX devstack on Ubuntu 14.04 directly</h2><p>Launch EC2 instance with 2 vCPUs 4G memory</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211</span><br><span class="line">$ sudo apt-get update -y</span><br><span class="line">$ sudo apt-get upgrade -y</span><br><span class="line">$ sudo reboot</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211</span><br><span class="line">$ <span class="built_in">export</span> OPENEDX_RELEASE=named-release/dogwood</span><br><span class="line">$ wget https://raw.githubusercontent.com/edx/configuration/master/util/install/ansible-bootstrap.sh</span><br><span class="line">$ chmod +x ansible-bootstrap.sh</span><br><span class="line">$ sudo ./ansible-bootstrap.sh</span><br><span class="line">$ grep -rl <span class="string">"vagrant"</span> /edx/app/edx_ansible/edx_ansible/playbooks/roles/local_dev/</span><br><span class="line">$ grep -rl <span class="string">"vagrant"</span> /edx/app/edx_ansible/edx_ansible/playbooks/roles/local_dev/ | xargs sudo sed -i <span class="string">'s/vagrant/ubuntu/g'</span></span><br><span class="line">$ sudo sed -i <span class="string">'/edxapp_user: edxapp/ a\edxapp_ruby_version: "1.9.3-p551"'</span> /edx/app/edx_ansible/edx_ansible/playbooks/roles/edxapp/defaults/main.yml</span><br><span class="line">$ sudo sed -i <span class="string">'/- name: git checkout edx_ansible repo into edx_ansible_code_dir/ a\  ignore_errors: yes'</span> /edx/app/edx_ansible/edx_ansible/playbooks/roles/edx_ansible/tasks/deploy.yml</span><br><span class="line">$ sudo sed -i <span class="string">'/- edxapp_common/ a\  - role: rbenv\n    rbenv_user: "&#123;&#123; edxapp_user &#125;&#125;"\n    rbenv_dir: "&#123;&#123; edxapp_app_dir &#125;&#125;"\n    rbenv_ruby_version: "&#123;&#123; edxapp_ruby_version &#125;&#125;"'</span> /edx/app/edx_ansible/edx_ansible/playbooks/roles/edxapp/meta/main.yml</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim devstack.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! -d /edx/app/edx_ansible ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Error: Base box is missing provisioning scripts."</span> 1&gt;&amp;2</span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">OPENEDX_RELEASE=named-release/dogwood</span><br><span class="line"><span class="built_in">export</span> PYTHONUNBUFFERED=1</span><br><span class="line"><span class="built_in">source</span> /edx/app/edx_ansible/venvs/edx_ansible/bin/activate</span><br><span class="line"><span class="built_in">export</span> PIP_REQUIRE_VIRTUALENV=<span class="literal">true</span></span><br><span class="line"><span class="built_in">export</span> PIP_RESPECT_VIRTUALENV=<span class="literal">true</span></span><br><span class="line"><span class="built_in">cd</span> /edx/app/edx_ansible/edx_ansible/playbooks</span><br><span class="line"></span><br><span class="line"><span class="comment"># Did we specify an openedx release?</span></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$OPENEDX_RELEASE</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  EXTRA_VARS=<span class="string">"-e edx_platform_version=<span class="variable">$OPENEDX_RELEASE</span> \</span></span><br><span class="line"><span class="string">    -e certs_version=<span class="variable">$OPENEDX_RELEASE</span> \</span></span><br><span class="line"><span class="string">    -e forum_version=<span class="variable">$OPENEDX_RELEASE</span> \</span></span><br><span class="line"><span class="string">    -e xqueue_version=<span class="variable">$OPENEDX_RELEASE</span> \</span></span><br><span class="line"><span class="string">  "</span></span><br><span class="line">  CONFIG_VER=<span class="variable">$OPENEDX_RELEASE</span></span><br><span class="line">  <span class="comment"># Need to ensure that the configuration repo is updated</span></span><br><span class="line">  <span class="comment"># The vagrant-devstack.yml playbook will also do this, but only</span></span><br><span class="line">  <span class="comment"># after loading the playbooks into memory.  If these are out of date,</span></span><br><span class="line">  <span class="comment"># this can cause problems (e.g. looking for templates that no longer exist).</span></span><br><span class="line">  /edx/bin/update configuration <span class="variable">$CONFIG_VER</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  CONFIG_VER=<span class="string">"master"</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">ansible-playbook -i localhost, -c <span class="built_in">local</span> run_role.yml -e role=edx_ansible -e configuration_version=<span class="variable">$CONFIG_VER</span> <span class="variable">$EXTRA_VARS</span></span><br><span class="line">ansible-playbook -i localhost, -c <span class="built_in">local</span> vagrant-devstack.yml -e configuration_version=<span class="variable">$CONFIG_VER</span> <span class="variable">$EXTRA_VARS</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ chmod +x devstack.sh</span><br><span class="line">$ sudo ./devstack.sh</span><br></pre></td></tr></table></figure>
+<p>After installation, try to run studio:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo su edxapp</span><br><span class="line">$ paver devstack studio</span><br></pre></td></tr></table></figure>
+<p>Faild due to bundle not installed, looks like Ruby/Gems/Bundle files installed under /edx/app/edxapp/.gems, but not installed properly. Then reinstall them.</p>
+<p>Set edxapp user environment varibles, execute following commands as ubuntu user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo sed -i <span class="string">'/SKIP_WS_MIGRATIONS="1"/ a\export GEM_HOME="/edx/app/edxapp/.gem"\nexport CONFIG_ROOT="/edx/app/edxapp"\nexport GEM_PATH="/edx/app/edxapp/.gem"\nexport RBENV_ROOT="/edx/app/edxapp/.rbenv"'</span> /edx/app/edxapp/edxapp_env</span><br><span class="line">$ sudo sed -i <span class="string">'/export PATH=/ c\export PATH="/edx/app/edxapp/venvs/edxapp/bin:/edx/app/edxapp/edx-platform/bin:/edx/app/edxapp/.rbenv/bin:/edx/app/edxapp/.rbenv/shims:/edx/app/edxapp/.gem/bin:/edx/app/edxapp/edx-platform/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'</span> /edx/app/edxapp/edxapp_env</span><br><span class="line">$ sudo sed -i <span class="string">'/1.9.3/ c\1.9.3-p551'</span> /edx/app/edxapp/edx-platform/.ruby-version</span><br></pre></td></tr></table></figure>
+<p>The following commands executed with user edxapp, refer to steps in /edx/app/edx_ansible/edx_ansible/playbooks/roles/rbenv/tasks/main.yml.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ sudo su edxapp</span><br><span class="line">$ rbenv versions | grep 1.9.3-p551</span><br><span class="line">$ rbenv install 1.9.3-p551</span><br><span class="line">$ rbenv global 1.9.3-p551</span><br><span class="line">$ gem install bundler -v 1.11.2</span><br><span class="line">$ gem install rake -v 10.4.2</span><br><span class="line">$ gem install rubygems-update &amp;&amp; update_rubygems</span><br><span class="line">$ rbenv <span class="built_in">rehash</span></span><br></pre></td></tr></table></figure>
+<p>Then run studio again, it works but could not be accessed from remote, the firewall of EC2 blocked the inbound request. Just add new rule with port 8001 to security group, then everything looks fine.</p>
+<p>To run studio without pip install requirements every time, set environment varible:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> NO_PREREQ_INSTALL=True</span><br></pre></td></tr></table></figure></p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/28/Open-edX-Analytics-devstack-on-Ubuntu-without-Vagrant/" data-tooltip="Open edX Analytics devstack on Ubuntu without Vagrant" aria-label="上一篇: Open edX Analytics devstack on Ubuntu without Vagrant">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" data-tooltip="Install Magento 1.9.x on Ubuntu" aria-label="下一篇: Install Magento 1.9.x on Ubuntu">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Dong Jinpeng. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/28/Open-edX-Analytics-devstack-on-Ubuntu-without-Vagrant/" data-tooltip="Open edX Analytics devstack on Ubuntu without Vagrant" aria-label="上一篇: Open edX Analytics devstack on Ubuntu without Vagrant">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/" data-tooltip="Install Magento 1.9.x on Ubuntu" aria-label="下一篇: Install Magento 1.9.x on Ubuntu">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" title="分享到 Facebook">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" title="分享到 Twitter">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/" title="分享到 Google+">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/">
+                    <i class="fa fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/">
+                    <i class="fa fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <h4 id="about-card-name">Dong Jinpeng</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">没有找到文章</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/08/28/hello-world/">
+                            <h3 class="media-heading">Hello World</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年8月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/08/28/Greek-Alphabet/">
+                            <h3 class="media-heading">Greek Alphabet</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年8月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2015/12/17/Go-Programming-Lanauges-Reading-Notes-Chapter-1/">
+                            <h3 class="media-heading">Go Programming Lanauges Reading Notes Chapter 1</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2015年12月17日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-host/">
+                            <h3 class="media-heading">Open edX devstack on Ubuntu host</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/桃花庵歌/">
+                            <h3 class="media-heading">桃花庵歌</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Install-Magento-1-9-x-on-Ubuntu/">
+                            <h3 class="media-heading">Install Magento 1.9.x on Ubuntu</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/21/Open-edX-devstack-on-Ubuntu-without-Vagrant/">
+                            <h3 class="media-heading">Open edX devstack on Ubuntu without Vagrant</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月21日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/04/28/Open-edX-Analytics-devstack-on-Ubuntu-without-Vagrant/">
+                            <h3 class="media-heading">Open edX Analytics devstack on Ubuntu without Vagrant</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年4月28日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/06/01/Python-debug-with-PDB/">
+                            <h3 class="media-heading">Python debug with PDB</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年6月1日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://jinpeng.github.io/2016/08/19/Install-Tensorflow-on-Ubuntu-16-04-with-NVidia-GPU-accelerating/">
+                            <h3 class="media-heading">Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    2016年8月19日
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="没有找到文章"
+                data-message-one="找到 1 篇文章"
+                data-message-other="找到 {n} 篇文章">
+                找到 12 篇文章
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-yhuo2grt8r7qkqumzgjoglkfbicl1thukjgmla6jopu56zpcowfedi5zjcor.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('10EH72KECT', 'a366c3ad0701974d30e9be2a4847fd11');
+        var algoliaIndex = algoliaClient.initIndex('jp-hexo-blog');
+    </script>
+
+
+    </body>
+</html>
