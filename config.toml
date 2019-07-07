@@ -1,4 +1,13 @@
 baseURL = "https://jinpeng.github.com/"
 languageCode = "en-us"
 title = "Jinpeng's Blog"
-theme = "hyde"
+theme = "m10c"
+
+[params]
+  author = "Dong Jinpeng"
+  description = "An old programmer keeps learning new techniques."
+  avatar = "http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg"
+
+  [[params.social]]
+    name = "github"
+    url = "https://github.com/jinpeng"
