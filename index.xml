@@ -28,10 +28,9 @@
       <pubDate>Wed, 09 May 2018 08:37:21 +0000</pubDate>
       
       <guid>https://jinpeng.github.com/post/regular-expression/</guid>
-      <description>Regular Expression 1966年，基于pattern的早期NLP系统ELIZA，可以和人进行简单的对话，并且有人认为ELIZA真的可以理解他。在ELIZA和后来的一些给予pattern的chatbots系统中，以及其他很多NLP任务中，正则表达式（regular expression）都是一个基本的但重要的工具。例如：信息抽取（information extraction），包括现在的很多爬虫，需要采集特定信息，也会使用正则表达式与XPath、CSS selector等一起使用，从爬取的网页里抽取信息；还有一些日历应用，可以从email、短信、IM消息、社交网络等文本中抽取时间、地点、事件等信息，自动添加到日历中。又例如：文本正则化（text normalization），需要对文本进行tokenization，对于中文要分词，对于英文也需要识别被空格分隔的几部分组成的词，还需要把缩写展开，识别表情符号（emoji）或者twitter的hashtag等；文本正则化还包括词形还原（lemmatization）或者简化版词形还原——词干提取（stemming），后者常用于搜索索引。
+      <description>1966年，基于pattern的早期NLP系统ELIZA，可以和人进行简单的对话，并且有人认为ELIZA真的可以理解他。在ELIZA和后来的一些给予pattern的chatbots系统中，以及其他很多NLP任务中，正则表达式（regular expression）都是一个基本的但重要的工具。例如：信息抽取（information extraction），包括现在的很多爬虫，需要采集特定信息，也会使用正则表达式与XPath、CSS selector等一起使用，从爬取的网页里抽取信息；还有一些日历应用，可以从email、短信、IM消息、社交网络等文本中抽取时间、地点、事件等信息，自动添加到日历中。又例如：文本正则化（text normalization），需要对文本进行tokenization，对于中文要分词，对于英文也需要识别被空格分隔的几部分组成的词，还需要把缩写展开，识别表情符号（emoji）或者twitter的hashtag等；文本正则化还包括词形还原（lemmatization）或者简化版词形还原——词干提取（stemming），后者常用于搜索索引。
 正则表达式（regular expression）是用于描述字符串集合的一种代数符号（algebraic notations），常用于在文档集中检索符合特定模式的文本。比如：Unix命令grep就是使用正则表达式进行文本检索的常用工具。
-####基本模式
-简单字符序列，例如：/Bufferfly/，匹配完整的字符串，匹配是大小写敏感的。
+基本模式 简单字符序列，例如：/Bufferfly/，匹配完整的字符串，匹配是大小写敏感的。
 方括号[]是一种disjunction，例如：/[Ww]/匹配的是大写或者小写w；/[0123456789]/匹配的是任意单个数字（digit）。
 使用范围（range）可以简化一些定义明确序列的字符disjunction，例如：/[0-9]/相当于/[0123456789]/，/[A-D]/相当于/[ABCD]/。
 否定符号（^），在方括号内，当^紧跟在左方括号后面时，表示否定（negation），匹配的是与后面的字符串不相同的字符。例如：/[^A-Z]/表示非大写字母。但当^不是紧跟在左方括号后面时，只表示^字符本身。
