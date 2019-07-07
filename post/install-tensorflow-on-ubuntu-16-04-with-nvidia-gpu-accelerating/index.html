@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating // Jinpeng&#39;s Blog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Dong Jinpeng" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://jinpeng.github.com/css/main.min.59023e5fd38d6ecb0e1dfbb295077c3c67e00e3b9eb3feaf34b5a5e6b332897a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating"/>
+<meta name="twitter:description" content="Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating Hardware: Lenovo T450, CPU i7-5500U CPU @ 2.40GHz, Graphics Card GeForce 940m.
+Install Virtualenv $ sudo apt-get install python-pip python-dev python-virtualenv $ makedir ~/env $ virtualenv --system-site-packages ~/env/tensorflow $ printf &#39;\nalias tensorflow=&quot;source ~/env/tensorflow/bin/activate&quot;&#39; &gt;&gt; ~/.bashrc $ source ~/.bashrc $ tensorflow (tensorflow)$ deactivate  Install Other Dependencies $ sudo apt-get install python-numpy python-wheel python-imaging swig  Install JDK (Bazel dependency) $ sudo apt-get install software-properties-common $ sudo add-apt-repository ppa:webupd8team/java $ sudo apt-get update $ sudo apt-get install oracle-java8-installer $ java -version java version &quot;1."/>
+
+    <meta property="og:title" content="Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating" />
+<meta property="og:description" content="Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating Hardware: Lenovo T450, CPU i7-5500U CPU @ 2.40GHz, Graphics Card GeForce 940m.
+Install Virtualenv $ sudo apt-get install python-pip python-dev python-virtualenv $ makedir ~/env $ virtualenv --system-site-packages ~/env/tensorflow $ printf &#39;\nalias tensorflow=&quot;source ~/env/tensorflow/bin/activate&quot;&#39; &gt;&gt; ~/.bashrc $ source ~/.bashrc $ tensorflow (tensorflow)$ deactivate  Install Other Dependencies $ sudo apt-get install python-numpy python-wheel python-imaging swig  Install JDK (Bazel dependency) $ sudo apt-get install software-properties-common $ sudo add-apt-repository ppa:webupd8team/java $ sudo apt-get update $ sudo apt-get install oracle-java8-installer $ java -version java version &quot;1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinpeng.github.com/post/install-tensorflow-on-ubuntu-16-04-with-nvidia-gpu-accelerating/" />
+<meta property="article:published_time" content="2016-08-19T15:04:00&#43;00:00"/>
+<meta property="article:modified_time" content="2016-08-19T15:04:00&#43;00:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://jinpeng.github.com/"><img class="app-header-avatar" src="http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg" alt="Dong Jinpeng" /></a>
+      <h1>Jinpeng&#39;s Blog</h1>
+      <p>An old programmer keeps learning new techniques.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/jinpeng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+      
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Aug 19, 2016
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          5 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h2 id="install-tensorflow-on-ubuntu-16-04-with-nvidia-gpu-accelerating">Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating</h2>
+
+<p>Hardware: Lenovo T450, CPU i7-5500U CPU @ 2.40GHz, Graphics Card GeForce 940m.</p>
+
+<h3 id="install-virtualenv">Install Virtualenv</h3>
+
+<pre><code class="language-bash">$ sudo apt-get install python-pip python-dev python-virtualenv
+$ makedir  ~/env
+$ virtualenv --system-site-packages ~/env/tensorflow
+$ printf '\nalias tensorflow=&quot;source ~/env/tensorflow/bin/activate&quot;' &gt;&gt; ~/.bashrc
+$ source ~/.bashrc
+$ tensorflow
+(tensorflow)$ deactivate
+</code></pre>
+
+<h3 id="install-other-dependencies">Install Other Dependencies</h3>
+
+<pre><code class="language-bash">$ sudo apt-get install python-numpy python-wheel python-imaging swig
+</code></pre>
+
+<h3 id="install-jdk-bazel-dependency">Install JDK (Bazel dependency)</h3>
+
+<pre><code class="language-bash">$ sudo apt-get install software-properties-common
+$ sudo add-apt-repository ppa:webupd8team/java
+$ sudo apt-get update
+$ sudo apt-get install oracle-java8-installer
+$ java -version
+java version &quot;1.8.0_101&quot;
+Java(TM) SE Runtime Environment (build 1.8.0_101-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
+</code></pre>
+
+<h3 id="install-bazel">Install Bazel</h3>
+
+<pre><code class="language-bash">$ sudo apt-get install pkg-config zip g++ zlib1g-dev unzip  
+$ wget https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-linux-x86_64.sh
+$ chmod +x bazel-0.3.1-installer-linux-x86_64.sh
+$ ./bazel-0.3.1-installer-linux-x86_64.sh --user
+$ printf '\nexport PATH=$PATH:$HOME/bin' &gt;&gt; ~/.bashrc
+$ source ~/.bashrc
+$ bazel version
+Build label: 0.3.1
+Build target: bazel-out/local-fastbuild/bin/src/main/java/com/google/devtools/build/lib/bazel/BazelServer_deploy.jar
+Build time: Fri Jul 29 09:09:52 2016 (1469783392)
+Build timestamp: 1469783392
+Build timestamp as int: 1469783392
+</code></pre>
+
+<h3 id="install-cuda-software">Install CUDA Software</h3>
+
+<p>Register NVIDIA <a href="https://developer.nvidia.com/accelerated-computing-developer">Accelerated Computer Developer Program</a></p>
+
+<p>Download cuda-repo-ubuntu1604-8-0-rc_8.0.27-1_amd64-deb and cuda-misc-headers-8-0_8.0.27.1-1_amd64.deb from <a href="https://developer.nvidia.com/cuda-downloads">cuda download page</a></p>
+
+<pre><code class="language-bash">$ sudo dpkg -i cuda-repo-ubuntu1604-8-0-rc_8.0.27-1_amd64.deb
+$ sudo apt-get update
+$ sudo apt-get install cuda
+$ sudo dpkg -i cuda-misc-headers-8-0_8.0.27.1-1_amd64.deb
+</code></pre>
+
+<p>Download cuDNN for CUDA 8.0 RC (cuDNN v5.1 Library for Linux) from
+<a href="https://developer.nvidia.com/cudnn">cuDNN download page</a></p>
+
+<pre><code>$ tar xvzf cudnn-8.0-linux-x64-v5.1.tgz
+$ sudo cp cuda/include/cudnn.h /usr/local/cuda/include
+$ sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+$ sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+$ printf '\nexport LD_LIBRARY_PATH=&quot;$LD_LIBRARY_PATH:/usr/local/cuda/lib64&quot;' &gt;&gt; ~/.bashrc
+</code></pre>
+
+<h3 id="install-tensorflow-from-source">Install TensorFlow from source</h3>
+
+<pre><code class="language-bash">$ git clone --recurse-submodules https://github.com/tensorflow/tensorflow
+$ cd tensorflow
+$ ./configure
+Please specify the location of python. [Default is /usr/bin/python]:
+Do you wish to build TensorFlow with Google Cloud Platform support? [y/N] N
+No Google Cloud Platform support will be enabled for TensorFlow
+Do you wish to build TensorFlow with GPU support? [y/N] y
+GPU support will be enabled for TensorFlow
+Please specify which gcc nvcc should use as the host compiler. [Default is /usr/bin/gcc]:
+Please specify the Cuda SDK version you want to use, e.g. 7.0. [Leave empty to use system default]:
+Please specify the location where CUDA  toolkit is installed. Refer to README.md for more details. [Default is /usr/local/cuda]:
+Please specify the Cudnn version you want to use. [Leave empty to use system default]:
+Please specify the location where cuDNN  library is installed. Refer to README.md for more details. [Default is /usr/local/cuda]:
+Please specify a list of comma-separated Cuda compute capabilities you want to build with.
+You can find the compute capability of your device at: https://developer.nvidia.com/cuda-gpus.
+Please note that each additional compute capability significantly increases your build time and binary size.
+[Default is: &quot;3.5,5.2&quot;]: 3.0
+Setting up Cuda include
+Setting up Cuda lib64
+Setting up Cuda bin
+Setting up Cuda nvvm
+Setting up CUPTI include
+Setting up CUPTI lib64
+Configuration finished
+
+$ bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
+</code></pre>
+
+<p>The build may fail several times, just need to re-run the command. And if the following error happens:</p>
+
+<pre><code>external/gif_archive/giflib-5.1.4/lib/gif_err.c:10:29: fatal error: gif_lib_private.h: No such file or directory
+</code></pre>
+
+<p>Just re-run the configure:</p>
+
+<pre><code>$ ./configure
+Please specify the location of python. [Default is /usr/bin/python]:
+Do you wish to build TensorFlow with Google Cloud Platform support? [y/N] N
+No Google Cloud Platform support will be enabled for TensorFlow
+Do you wish to build TensorFlow with GPU support? [y/N] y
+GPU support will be enabled for TensorFlow
+Please specify which gcc nvcc should use as the host compiler. [Default is /usr/bin/gcc]:
+Please specify the Cuda SDK version you want to use, e.g. 7.0. [Leave empty to use system default]:
+Please specify the location where CUDA  toolkit is installed. Refer to README.md for more details. [Default is /usr/local/cuda]:
+Please specify the Cudnn version you want to use. [Leave empty to use system default]:
+Please specify the location where cuDNN  library is installed. Refer to README.md for more details. [Default is /usr/local/cuda]:
+Please specify a list of comma-separated Cuda compute capabilities you want to build with.
+You can find the compute capability of your device at: https://developer.nvidia.com/cuda-gpus.
+Please note that each additional compute capability significantly increases your build time and binary size.
+[Default is: &quot;3.5,5.2&quot;]: 3.0
+Setting up Cuda include
+Setting up Cuda lib64
+Setting up Cuda bin
+Setting up Cuda nvvm
+Setting up CUPTI include
+Setting up CUPTI lib64
+Configuration finished
+</code></pre>
+
+<p>Then re-run the build and continue to generate wheel and install it in virtualenv.</p>
+
+<pre><code>$ bazel-bin/tensorflow/tools/pip_package/build_pip_package ~/tensorflow/bin
+$ tensorflow
+(tensorflow)$ sudo pip install ~/tensorflow/bin/~/tensorflow/bin/tensorflow-0.10.0rc0-py2-none-any.whl
+</code></pre>
+
+<h3 id="verify-the-installation">Verify the installation</h3>
+
+<p>Notice: do not try to run the following commands from tensorflow source folder. Otherwise, may encounter import tensorflow error:</p>
+
+<pre><code>&gt;&gt;&gt; import tensorflow as tf
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;tensorflow/__init__.py&quot;, line 23, in &lt;module&gt;
+    from tensorflow.python import *
+  File &quot;tensorflow/python/__init__.py&quot;, line 48, in &lt;module&gt;
+    from tensorflow.python import pywrap_tensorflow
+ImportError: cannot import name pywrap_tensorflow
+</code></pre>
+
+<p>Normal case should be like:</p>
+
+<pre><code>(tensorflow)$ python
+Python 2.7.12 (default, Jul  1 2016, 15:12:24)
+[GCC 5.4.0 20160609] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import tensorflow as tf
+I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcublas.so locally
+I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcudnn.so locally
+I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcufft.so locally
+I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:108] successfully opened CUDA library libcurand.so locally
+&gt;&gt;&gt; a = tf.constant(10)
+&gt;&gt;&gt; b = tf.constant(22)
+&gt;&gt;&gt; c = a + b
+&gt;&gt;&gt; session = tf.Session()
+&gt;&gt;&gt; print session.run(c)
+32
+&gt;&gt;&gt; 
+</code></pre>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Upgrade Hexo // Jinpeng&#39;s Blog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Dong Jinpeng" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://jinpeng.github.com/css/main.min.59023e5fd38d6ecb0e1dfbb295077c3c67e00e3b9eb3feaf34b5a5e6b332897a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Upgrade Hexo"/>
+<meta name="twitter:description" content="Why Upgrade Hexo 在使用hexo和github pages的过程中，经常出现hexo-cli报错，很早就想重新做一下开发环境，甚至想要换成其他的博客生成器，比如：Hugo。然而，另起炉灶总是要花费更多的时间，所以决定还是升级一下Hexo。 之前尝试重做环境遇到了很多坑，因此决定另选吉地，重新开始。
+Let&rsquo;s Do It 首先，升级hexo：
+$ npm i hexo-cli -g $ hexo version hexo: 3.7.1 hexo-cli: 1.1.0 os: Darwin 17.5.0 darwin x64 http_parser: 2.8.0 node: 9.10.1 v8: 6.2.414.46-node.23 uv: 1.19.2 zlib: 1.2.11 ares: 1.13.0 modules: 59 nghttp2: 1.29.0 napi: 2 openssl: 1.0.2o icu: 61.1 unicode: 10.0 cldr: 33.0 tz: 2018c  其次，在新的目录下创建blog site：
+$ hexo init jinpeng.github.io $ cd jinpeng.github.io $ npm i $ hexo s  打开浏览器访问：http://localhost:4000/，即可看到新建的博客。"/>
+
+    <meta property="og:title" content="Upgrade Hexo" />
+<meta property="og:description" content="Why Upgrade Hexo 在使用hexo和github pages的过程中，经常出现hexo-cli报错，很早就想重新做一下开发环境，甚至想要换成其他的博客生成器，比如：Hugo。然而，另起炉灶总是要花费更多的时间，所以决定还是升级一下Hexo。 之前尝试重做环境遇到了很多坑，因此决定另选吉地，重新开始。
+Let&rsquo;s Do It 首先，升级hexo：
+$ npm i hexo-cli -g $ hexo version hexo: 3.7.1 hexo-cli: 1.1.0 os: Darwin 17.5.0 darwin x64 http_parser: 2.8.0 node: 9.10.1 v8: 6.2.414.46-node.23 uv: 1.19.2 zlib: 1.2.11 ares: 1.13.0 modules: 59 nghttp2: 1.29.0 napi: 2 openssl: 1.0.2o icu: 61.1 unicode: 10.0 cldr: 33.0 tz: 2018c  其次，在新的目录下创建blog site：
+$ hexo init jinpeng.github.io $ cd jinpeng.github.io $ npm i $ hexo s  打开浏览器访问：http://localhost:4000/，即可看到新建的博客。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinpeng.github.com/post/upgrade-hexo/" />
+<meta property="article:published_time" content="2018-04-24T13:33:03&#43;00:00"/>
+<meta property="article:modified_time" content="2018-04-24T13:33:03&#43;00:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://jinpeng.github.com/"><img class="app-header-avatar" src="http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg" alt="Dong Jinpeng" /></a>
+      <h1>Jinpeng&#39;s Blog</h1>
+      <p>An old programmer keeps learning new techniques.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/jinpeng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+      
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Upgrade Hexo</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Apr 24, 2018
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          2 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h2 id="why-upgrade-hexo">Why Upgrade Hexo</h2>
+
+<p>在使用hexo和github pages的过程中，经常出现hexo-cli报错，很早就想重新做一下开发环境，甚至想要换成其他的博客生成器，比如：Hugo。然而，另起炉灶总是要花费更多的时间，所以决定还是升级一下Hexo。
+之前尝试重做环境遇到了很多坑，因此决定另选吉地，重新开始。</p>
+
+<h2 id="let-s-do-it">Let&rsquo;s Do It</h2>
+
+<p>首先，升级hexo：</p>
+
+<pre><code>$ npm i hexo-cli -g
+$ hexo version
+hexo: 3.7.1
+hexo-cli: 1.1.0
+os: Darwin 17.5.0 darwin x64
+http_parser: 2.8.0
+node: 9.10.1
+v8: 6.2.414.46-node.23
+uv: 1.19.2
+zlib: 1.2.11
+ares: 1.13.0
+modules: 59
+nghttp2: 1.29.0
+napi: 2
+openssl: 1.0.2o
+icu: 61.1
+unicode: 10.0
+cldr: 33.0
+tz: 2018c
+</code></pre>
+
+<p>其次，在新的目录下创建blog site：</p>
+
+<pre><code>$ hexo init jinpeng.github.io
+$ cd jinpeng.github.io
+$ npm i
+$ hexo s
+</code></pre>
+
+<p>打开浏览器访问：<a href="http://localhost:4000/，即可看到新建的博客。">http://localhost:4000/，即可看到新建的博客。</a></p>
+
+<p>第三，拷贝原来的博客源文件到新博客目录下：</p>
+
+<pre><code>$ cp ~/old/jinpeng.github.io/source/_posts/*.md source/_posts/
+</code></pre>
+
+<p>第四，编辑_config.yml，设置相应的参数。之所以不拷贝原来的_config.yml，是为了避免新旧版本不兼容。</p>
+
+<pre><code>title: Jinpeng's Blog
+subtitle:
+description:
+keywords: 
+author: Dong Jinpeng
+language: zh-cn
+timezone: Asia/Shanghai
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://jinpeng.github.io
+
+</code></pre>
+
+<p>注意，其中的language是zh-cn，而不是zh-CN，这主要是使用的theme tranquilpeak的语言是小写。
+这时候，运行hexo s，就可以看到之前的posts了，但还是用的缺省的landscape。</p>
+
+<p>第五，更换theme，编辑_config.yml</p>
+
+<pre><code>theme: tranquilpeak
+</code></pre>
+
+<p>下载theme包：</p>
+
+<pre><code>$ wget https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak/releases/download/v2.0.0/hexo-theme-tranquilpeak-built-for-production-2.0.0.zip
+$ unzip hexo-theme-tranquilpeak-built-for-production-2.0.0.zip
+$ mv hexo-theme-tranquilpeak-built-for-production-2.0.0 themes/tranquilpeak
+</code></pre>
+
+<p>创建all-categories，all-tags，all-archives等页面：</p>
+
+<pre><code>$ hexo new page &quot;all-categories&quot;
+$ hexo new page &quot;all-tags&quot;
+$ hexo new page &quot;all-archives&quot;
+</code></pre>
+
+<p>编辑生成的index.md，分别设置为以下内容：</p>
+
+<p>source/all-categories/index.md</p>
+
+<pre><code>---
+title: &quot;all-categories&quot;
+layout: &quot;all-categories&quot;
+comments: false
+---
+</code></pre>
+
+<p>source/all-tags/index.md</p>
+
+<pre><code>---
+title: &quot;all-tags&quot;
+layout: &quot;all-tags&quot;
+comments: false
+---
+</code></pre>
+
+<p>source/all-archives/index.md</p>
+
+<pre><code>---
+title: &quot;all-archives&quot;
+layout: &quot;all-archives&quot;
+comments: false
+---
+</code></pre>
+
+<p>增加搜索页面，使用Algolia：</p>
+
+<pre><code>$ npm install hexo-algoliasearch --save
+</code></pre>
+
+<p>编辑_config.yml，增加Algolia配置：</p>
+
+<pre><code># Search
+algolia:
+  appId: &quot;xxxxxxxx&quot;
+  apiKey: &quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;
+  adminApiKey: &quot;xxxxxxxxxxxxxxxxxxxxxxxxx&quot;
+  chunkSize: 5000
+  indexName: &quot;jp-hexo-blog&quot;
+  fields:
+    - content:strip:truncate,0,500
+    - excerpt:strip
+    - gallery
+    - permalink
+    - photos
+    - slug
+    - tags
+    - title
+</code></pre>
+
+<p>其中的appId，apiKey和adminApiKey需要到<a href="https://www.algolia.com/">Algolia网站</a>去注册帐号申请，帖子不多、访问量不大可以使用免费的。</p>
+
+<p>建索引需要手动执行：</p>
+
+<pre><code>$ hexo algolia
+</code></pre>
+
+<p>第六，允许使用数学公式，MathJax。由于缺省的Markdown渲染引擎不兼容，需要换用Kramed，并且做简单的修改，hexo-math也需要换成hexo-renderer-mathjax。</p>
+
+<pre><code>$ npm uninstall hexo-renderer-marked --save
+$ npm install hexo-renderer-kramed --save
+$ npm uninstall hexo-math --save
+$ npm install hexo-renderer-mathjax --save
+</code></pre>
+
+<p>编辑node_modules/hexo-renderer-kramed/lib/renderer.js，把下面的代码：</p>
+
+<pre><code>// Change inline math rule
+functionformatText(text) {
+    // Fit kramed's rule: $$ + \1 + $$
+    return text.replace(/`\$(.*?)\$`/g, '$$$$$1$$$$');
+}
+</code></pre>
+
+<p>改为：</p>
+
+<pre><code>// Change inline math rule
+function formatText(text) {
+    return text;
+}
+</code></pre>
+
+<p>编辑node_modules/hexo-renderer-mathjax/mathjax.html，替换CDN URL为MathJax官网上的CDN地址：</p>
+
+<pre><code>&lt;script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async&gt;&lt;/script&gt;
+</code></pre>
+
+<p>第七，部署到github pages：</p>
+
+<p>编辑_config.yml，修改deploy参数</p>
+
+<pre><code># Deployment
+## Docs: https://hexo.io/docs/deployment.html
+deploy:
+  type: git
+  repo: https://github.com/jinpeng/jinpeng.github.io.git
+  branch: master
+  message: 
+</code></pre>
+
+<p>执行部署命令：</p>
+
+<pre><code>$ hexo deploy
+</code></pre>
+
+<p>打开浏览器访问：<a href="http://jinpeng.github.io/就可以看到新部署的博客。">http://jinpeng.github.io/就可以看到新部署的博客。</a></p>
+
+<p>第八，替换github上原有的代码。原来的代码保存在hexo分支，master分支用于保存部署的页面。</p>
+
+<pre><code>$ git init
+$ git add .
+$ git commit -m &quot;upgrade hexo&quot;
+$ git remote add origin https://github.com/jinpeng/jinpeng.github.io.git
+$ git push origin :hexo
+$ git branch hexo
+$ git checkout hexo
+$ git push origin hexo
+</code></pre>
+
+<p>其中git push origin :hexo命令删除了远程仓库里的hexo分支。</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

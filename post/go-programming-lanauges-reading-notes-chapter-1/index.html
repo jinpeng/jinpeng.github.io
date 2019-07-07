@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Go Programming Lanauges Reading Notes Chapter 1 // Jinpeng&#39;s Blog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Dong Jinpeng" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://jinpeng.github.com/css/main.min.59023e5fd38d6ecb0e1dfbb295077c3c67e00e3b9eb3feaf34b5a5e6b332897a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go Programming Lanauges Reading Notes Chapter 1"/>
+<meta name="twitter:description" content="Tutorial 1.1 Hellow, World  Go is compiled language, go toolchain convert source code into native machine instructions. go command, and its subcommands: run, build, get Go source code file structure: package, imports, declarations of functions, variables, constants and types. Go code is organized into packages. Standard library has more than 100 packages. Package main is a special package for standalone executable program. Import exactly the packages needed. Function declaration: func NAME PARAM_LIST RETURN_LIST."/>
+
+    <meta property="og:title" content="Go Programming Lanauges Reading Notes Chapter 1" />
+<meta property="og:description" content="Tutorial 1.1 Hellow, World  Go is compiled language, go toolchain convert source code into native machine instructions. go command, and its subcommands: run, build, get Go source code file structure: package, imports, declarations of functions, variables, constants and types. Go code is organized into packages. Standard library has more than 100 packages. Package main is a special package for standalone executable program. Import exactly the packages needed. Function declaration: func NAME PARAM_LIST RETURN_LIST." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinpeng.github.com/post/go-programming-lanauges-reading-notes-chapter-1/" />
+<meta property="article:published_time" content="2015-12-17T10:32:52&#43;00:00"/>
+<meta property="article:modified_time" content="2015-12-17T10:32:52&#43;00:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://jinpeng.github.com/"><img class="app-header-avatar" src="http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg" alt="Dong Jinpeng" /></a>
+      <h1>Jinpeng&#39;s Blog</h1>
+      <p>An old programmer keeps learning new techniques.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/jinpeng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+      
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Go Programming Lanauges Reading Notes Chapter 1</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Dec 17, 2015
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          6 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h1 id="tutorial">Tutorial</h1>
+
+<h2 id="1-1-hellow-world">1.1 Hellow, World</h2>
+
+<ol>
+<li>Go is compiled language, go toolchain convert source code into native machine instructions.</li>
+<li>go command, and its subcommands: run, build, get</li>
+<li>Go source code file structure: package, imports, declarations of functions, variables, constants and types.</li>
+<li>Go code is organized into packages. Standard library has more than 100 packages.</li>
+<li>Package main is a special package for standalone executable program.</li>
+<li>Import exactly the packages needed.</li>
+<li>Function declaration: func NAME PARAM_LIST RETURN_LIST.</li>
+<li>Semicolon is not required at the end of line, but newline following certain tokens is converted into semicolon.</li>
+<li>Strong stance on code formatting. gofmt tool and go command fmt subcommand.</li>
+<li>goimports tool: go get golang.org/x/tools/cmd/goimports</li>
+</ol>
+
+<h2 id="1-2-command-line-arguments">1.2 Command-Line Arguments</h2>
+
+<ol>
+<li>os package provides functions and values for dealing with OS in a platform independent way.</li>
+<li>os.Args is a variable for command-line arguments. It is a slice of strings.</li>
+<li>Slice s: s[i], s[m:n], len(s)</li>
+<li>All indexing in Go uses half-open intervals: include the first and exclude the last, s[m:n].</li>
+<li>os.Args[0] is the name of the command itself. Arguments are os.Args[1:len(os.Args)], or os.Args[1:].</li>
+<li>By convention, we describe package in a comment immediately preceding package declaration. For main package, this comment describes the program as a whole.</li>
+<li>Variable not explicitly initialized is implicitely initialized to zero value for its type, 0 for numeric types and empty string &ldquo;&rdquo; for strings.</li>
+<li>Go provides usual arithmetic and logical operators.</li>
+<li>Each arithmetic and logical operator has corresponding assignment operator, like +=, *=.</li>
+<li>Arithemtic operator + could concatenate two strings.</li>
+<li>Short variable declaration i := 1.</li>
+<li>Increment and decrement statements i++/i&ndash; are statements, not expressions in C-like languages, and are only postfix. So j = i++ or ++i are both illegal.</li>
+
+<li><p>for loop has several forms:</p>
+
+<pre><code>for initialization; condition; post {
+}
+
+for condition {
+}
+
+for {
+}
+
+for _, arg := range os.Args[1:] {
+}
+</code></pre></li>
+
+<li><p>Blank identifier _ is used whenever syntax requires a variable name but program logic does not.</p></li>
+
+<li><p>Several ways to declare varaible:</p>
+
+<pre><code>s := &quot;&quot;           // shore variable declaration
+var s string      // default initialization
+var s = &quot;&quot;        // ususally for multiple variables
+var string = &quot;&quot;   // used when variable type and intial value type are not same
+</code></pre></li>
+
+<li><p>string.Join function</p></li>
+
+<li><p>fmt.Println(os.Args[1:])</p></li>
+</ol>
+
+<h2 id="1-3-finding-duplicated-lines">1.3 Finding Duplicated Lines</h2>
+
+<ol>
+<li>A map hold a set of key/value pairs and provides constant-time operations to store, retrieve, or test for an item in the set.</li>
+<li>map key can be any type whose values can be compared with ==, value can be any type.</li>
+<li>If map does not contain key, map[key] return zero value to its type.</li>
+<li>The order of map iteration is intentional random.</li>
+<li>bufio.Scanner is the most useful feature for input/output.</li>
+
+<li><p>fmt.Printf</p>
+
+<pre><code>%d              decimal integer
+%x, %o, %b      hexadecimal, octal, binary
+%f, %g, %e      floating point number
+%t              boolean
+%c              rune(Unicode code point)
+%s              string
+%q              quoted string &quot;abc&quot; or rune 'c'
+%v              any value in natural format
+%T              type of any value
+%%              literal percent sign(no operand)
+</code></pre></li>
+
+<li><p>escape sequences: \t \n</p></li>
+
+<li><p>fmt.Println formats arguments as if by %v, followed by a newline.</p></li>
+
+<li><p>os.Open returns two values, an open file (*os.File) and error type. If error equals nil, the file opened successfully.</p></li>
+
+<li><p>Functions and other package level entities may be declared in any order.</p></li>
+
+<li><p>A map is a reference to the data structure created by make. Pass a map to a function, the function receives a copy of the reference, any modification in the function will be visible to reference held by the caller.</p></li>
+
+<li><p>ioutil.ReadFile return a byte slice that must be converted into a string so it can be split by strings.Split.</p></li>
+
+<li><p>bufio.Scanner, iotutil.ReadFile, ioutil.WriteFile use the Read and Write methods of *os.File.</p></li>
+</ol>
+
+<h2 id="1-4-animated-gifs">1.4 Animated GIFs</h2>
+
+<ol>
+<li>Import a package whose path has multiple components, like image/color, we refer to the package with a name that comes from the last component.</li>
+<li>The value of a constant must be a number, string, or boolean.</li>
+<li>Composite literals: []color.Color{&hellip;}, gif.GIF{&hellip;}.</li>
+<li>A struct is a group of values called fields, often of different types, that are collected together in a single object that can be treated as a unit.</li>
+<li>When init a variable of a struct with some fields&rsquo; value, other fields&rsquo; value are zero value of their type.</li>
+<li>Individual fields can be accessed with dot notation.</li>
+</ol>
+
+<h2 id="1-5-feteching-a-url">1.5 Feteching a URL</h2>
+
+<ol>
+<li>http.Get function makes an HTTP request and, if there is no error, returns the result in the response struct resp. The Body field contains the server response a a readable stream.</li>
+<li>ioutil.ReadAll function reads the entire response.</li>
+</ol>
+
+<h2 id="1-6-feteching-urls-concurrently">1.6 Feteching URLs Concurrently</h2>
+
+<ol>
+<li>A gorountine is a concurrent function execution.</li>
+<li>A channel is a communication mechanism that allows one gorountine to pass values of specified type to another gorountine.</li>
+<li>The main function runs in a goroutine and go statement create additional gorountines.</li>
+<li>When one gorountine attempts a send or receive on a channel, it blocks until another goroutine attempts the corresponding receive or send operation, at which point the value is transfered and both gorountines proceed.</li>
+<li>ioutil.Discard is an io.Writer on which all Write calls succeed without doing anything.</li>
+</ol>
+
+<h2 id="1-7-a-web-server">1.7 A Web Server</h2>
+
+<ol>
+<li>A handler pattern that ends with a slash matches any URL that has the pattern as a prefix.</li>
+<li>Behind the scenes, the server runs the handler for each incoming request in a separate gorountine.</li>
+<li>Race condition, two concurrent requests try to update the same variable at the same time.</li>
+<li>One could use sync.Mutex.Lock and sync.Mutex.Unlock to avoid race conditions.</li>
+<li>Four output streams, os.Stdout, a file, ioutil.Discard, http.ResponseWriter, share a common interface, io.Writer.</li>
+<li>function literal, an anonymous function defined at its point of use.</li>
+</ol>
+
+<h2 id="1-8-loose-ends">1.8 Loose Ends</h2>
+
+<ol>
+<li>Control flow: if, for, switch.</li>
+<li>Switch cases do not fall through from one to the next as C-like languages. fallthrough overrides this behavior. default case is optional.</li>
+<li>A switch does not need an operand. It is called tagless switch. It is equivalent to switch true.</li>
+<li>Switch may include an optional simple statement&ndash;a short variable declaration, an increment or assignment statement, or function call&ndash;that can be used to set a value before it is tested.</li>
+<li>The break and continue statements modify the flow of control. Statements may be labeled so that break and continue can refer to them.</li>
+<li>The goto statement is intended for machine-generated code.</li>
+<li>Named types: A type declaration makes it possible to give a name to an existing type.</li>
+<li>Pointers: The &amp; operator yields the address of a variable, and * operator retrieves the variable that the pointer refers to, but there is no pointer arithmetic.</li>
+<li>Methods and interfaces: A method is a function associated with a named type. Interfaces are abstract types that treat different concrete types in the same way based on what methods they have, not how they are represented or implemented.</li>
+<li>Packages: standard packages and community shared ones. Standard packages: <a href="https://golang.org/pkg">https://golang.org/pkg</a>, community shared packages: <a href="https://godoc.org">https://godoc.org</a>. go doc tool.</li>
+<li>Comments: documentation comments at the beginning of a program or package, comments before declaration of each function are important. They can be used by go doc or godoc to locate and display documentation.</li>
+<li>Comments do not nest.</li>
+</ol>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

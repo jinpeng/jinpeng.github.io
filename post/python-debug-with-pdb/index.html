@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Python debug with PDB // Jinpeng&#39;s Blog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Dong Jinpeng" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://jinpeng.github.com/css/main.min.59023e5fd38d6ecb0e1dfbb295077c3c67e00e3b9eb3feaf34b5a5e6b332897a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python debug with PDB"/>
+<meta name="twitter:description" content="PDB调试启动方式  对于从命令行运行的程序  $ python -m pdb myscript.py   对于较为复杂大型程序或者需要特殊脚本启动的程序  在感兴趣的代码中插入：
+import pdb pdb.set_trace()  然后用原有的方式启动，程序运行到代码段会进入PDB调试状态
+ 在Python REPL中调试  &gt;&gt;&gt; import pdb &gt;&gt;&gt; import mymodule &gt;&gt;&gt; pdb.run(&#39;mymodule.test()&#39;)  常用PDB命令  帮助命令
+(Pdb) h Documented commands (type help &lt;topic&gt;): ======================================== EOF bt cont enable jump pp run unt a c continue exit l q s until alias cl d h list quit step up args clear debug help n r tbreak w b commands disable ignore next restart u whatis break condition down j p return unalias where Miscellaneous help topics: ========================== exec pdb Undocumented commands: ====================== retval rv  查看当前代码片段"/>
+
+    <meta property="og:title" content="Python debug with PDB" />
+<meta property="og:description" content="PDB调试启动方式  对于从命令行运行的程序  $ python -m pdb myscript.py   对于较为复杂大型程序或者需要特殊脚本启动的程序  在感兴趣的代码中插入：
+import pdb pdb.set_trace()  然后用原有的方式启动，程序运行到代码段会进入PDB调试状态
+ 在Python REPL中调试  &gt;&gt;&gt; import pdb &gt;&gt;&gt; import mymodule &gt;&gt;&gt; pdb.run(&#39;mymodule.test()&#39;)  常用PDB命令  帮助命令
+(Pdb) h Documented commands (type help &lt;topic&gt;): ======================================== EOF bt cont enable jump pp run unt a c continue exit l q s until alias cl d h list quit step up args clear debug help n r tbreak w b commands disable ignore next restart u whatis break condition down j p return unalias where Miscellaneous help topics: ========================== exec pdb Undocumented commands: ====================== retval rv  查看当前代码片段" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinpeng.github.com/post/python-debug-with-pdb/" />
+<meta property="article:published_time" content="2016-06-01T18:18:18&#43;00:00"/>
+<meta property="article:modified_time" content="2016-06-01T18:18:18&#43;00:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://jinpeng.github.com/"><img class="app-header-avatar" src="http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg" alt="Dong Jinpeng" /></a>
+      <h1>Jinpeng&#39;s Blog</h1>
+      <p>An old programmer keeps learning new techniques.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/jinpeng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+      
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Python debug with PDB</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Jun 1, 2016
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h2 id="pdb调试启动方式">PDB调试启动方式</h2>
+
+<ul>
+<li>对于从命令行运行的程序</li>
+</ul>
+
+<pre><code class="language-shell">$ python -m pdb myscript.py
+</code></pre>
+
+<ul>
+<li>对于较为复杂大型程序或者需要特殊脚本启动的程序</li>
+</ul>
+
+<p>在感兴趣的代码中插入：</p>
+
+<pre><code class="language-python">import pdb
+pdb.set_trace()
+</code></pre>
+
+<p>然后用原有的方式启动，程序运行到代码段会进入PDB调试状态</p>
+
+<ul>
+<li>在Python REPL中调试</li>
+</ul>
+
+<pre><code class="language-python">&gt;&gt;&gt; import pdb
+&gt;&gt;&gt; import mymodule
+&gt;&gt;&gt; pdb.run('mymodule.test()')
+</code></pre>
+
+<h2 id="常用pdb命令">常用PDB命令</h2>
+
+<ul>
+<li><p>帮助命令</p>
+
+<pre><code>(Pdb) h
+Documented commands (type help &lt;topic&gt;):
+========================================
+EOF    bt         cont      enable  jump  pp       run      unt
+a      c          continue  exit    l     q        s        until
+alias  cl         d         h       list  quit     step     up
+args   clear      debug     help    n     r        tbreak   w
+b      commands   disable   ignore  next  restart  u        whatis
+break  condition  down      j       p     return   unalias  where
+
+Miscellaneous help topics:
+==========================
+exec  pdb
+
+Undocumented commands:
+======================
+retval  rv
+</code></pre></li>
+
+<li><p>查看当前代码片段</p>
+
+<pre><code>(Pdb) l
+1  -&gt;	import mysql.connector
+2  	from mysql.connector import fabric
+3  	from mysql.connector import errors
+4  	import time
+5  	config = {
+6  	    'fabric': {
+7  	        'host': 'localhost',
+8  	        'port': 32274,
+9  	        'username': 'admin',
+10  	        'password': 'admin',
+11  	        'report_errors': True
+</code></pre></li>
+
+<li><p>设置断点</p>
+
+<pre><code>(Pdb) b 122
+</code></pre></li>
+
+<li><p>设置条件断点</p>
+
+<pre><code>(Pdb) b 122, a == 2
+</code></pre></li>
+
+<li><p>清除断点</p>
+
+<pre><code>(Pdb) cl(ear)
+</code></pre>
+
+<pre><code>(Pdb) cl(ear) 2
+</code></pre></li>
+
+<li><p>禁用／激活断点</p>
+
+<pre><code>(Pdb) disable 3
+</code></pre>
+
+<pre><code>(Pdb) enable 3
+</code></pre></li>
+
+<li><p>单步执行</p></li>
+</ul>
+
+<p>Step over</p>
+
+<pre><code>(Pdb) n(ext)
+</code></pre>
+
+<p>Step into</p>
+
+<pre><code>(Pdb) s(tep)
+</code></pre>
+
+<ul>
+<li><p>继续执行</p>
+
+<pre><code>(Pdb) c(ont(inue))
+</code></pre></li>
+
+<li><p>跳转</p></li>
+</ul>
+
+<p>跳转不会执行被跳过的代码</p>
+
+<pre><code>(Pdb) j(ump) 18
+</code></pre>
+
+<ul>
+<li><p>打印变量</p>
+
+<pre><code>(Pdb) p fcnx
+</code></pre></li>
+
+<li><p>打印当前函数的参数</p>
+
+<pre><code>(Pdb) a(rgs)
+</code></pre></li>
+
+<li><p>执行表达式</p>
+
+<pre><code>(Pdb) !fcnx=None
+</code></pre></li>
+
+<li><p>重新启动调试器</p>
+
+<pre><code>(Pdb) run [args]
+</code></pre></li>
+
+<li><p>退出调试</p>
+
+<pre><code>(Pdb) q(uit)
+</code></pre></li>
+</ul>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

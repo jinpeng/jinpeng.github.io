@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Open edX devstack on Ubuntu host // Jinpeng&#39;s Blog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Dong Jinpeng" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://jinpeng.github.com/css/main.min.59023e5fd38d6ecb0e1dfbb295077c3c67e00e3b9eb3feaf34b5a5e6b332897a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Open edX devstack on Ubuntu host"/>
+<meta name="twitter:description" content="Open edX Devstack Ubuntu host 安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450.
+安装VirtualBox和Vagrant $ sudo vi /etc/apt/sources.list  在文档最后添加VirtualBox源：
+deb http://download.virtualbox.org/virtualbox/debian trusty contrib  $ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add - $ sudo apt-get update $ sudo apt-get install virtualbox-5.0  $ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb $ sudo dpkg -i vagrant_1.8.1_x86_64.deb  安装Vagrant plugins，vagrant-vbguest等。
+修改Vagrant所用Ruby gems服务器为淘宝的镜像：
+$ grep -rl &quot;https://rubygems.org&quot; /opt/vagrant/embedded/gems/ | xargs sudo sed -i &#39;s/https\:\/\/rubygems.org/https\:\/\/ruby.taobao.org/g&#39; $ grep -rl &quot;https://rubygems."/>
+
+    <meta property="og:title" content="Open edX devstack on Ubuntu host" />
+<meta property="og:description" content="Open edX Devstack Ubuntu host 安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450.
+安装VirtualBox和Vagrant $ sudo vi /etc/apt/sources.list  在文档最后添加VirtualBox源：
+deb http://download.virtualbox.org/virtualbox/debian trusty contrib  $ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add - $ sudo apt-get update $ sudo apt-get install virtualbox-5.0  $ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb $ sudo dpkg -i vagrant_1.8.1_x86_64.deb  安装Vagrant plugins，vagrant-vbguest等。
+修改Vagrant所用Ruby gems服务器为淘宝的镜像：
+$ grep -rl &quot;https://rubygems.org&quot; /opt/vagrant/embedded/gems/ | xargs sudo sed -i &#39;s/https\:\/\/rubygems.org/https\:\/\/ruby.taobao.org/g&#39; $ grep -rl &quot;https://rubygems." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinpeng.github.com/post/open-edx-devstack-on-ubuntu-host/" />
+<meta property="article:published_time" content="2016-04-21T17:47:25&#43;00:00"/>
+<meta property="article:modified_time" content="2016-04-21T17:47:25&#43;00:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://jinpeng.github.com/"><img class="app-header-avatar" src="http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg" alt="Dong Jinpeng" /></a>
+      <h1>Jinpeng&#39;s Blog</h1>
+      <p>An old programmer keeps learning new techniques.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/jinpeng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+      
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Open edX devstack on Ubuntu host</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Apr 21, 2016
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          2 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h1 id="open-edx-devstack-ubuntu-host">Open edX Devstack Ubuntu host</h1>
+
+<p>安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450.</p>
+
+<h2 id="安装virtualbox和vagrant">安装VirtualBox和Vagrant</h2>
+
+<pre><code class="language-bash">$ sudo vi /etc/apt/sources.list
+</code></pre>
+
+<p>在文档最后添加VirtualBox源：</p>
+
+<pre><code>deb http://download.virtualbox.org/virtualbox/debian trusty contrib
+</code></pre>
+
+<pre><code class="language-bash">$ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+$ sudo apt-get update
+$ sudo apt-get install virtualbox-5.0
+</code></pre>
+
+<pre><code class="language-bash">$ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
+$ sudo dpkg -i vagrant_1.8.1_x86_64.deb
+</code></pre>
+
+<p>安装Vagrant plugins，vagrant-vbguest等。<br />
+修改Vagrant所用Ruby gems服务器为淘宝的镜像：</p>
+
+<pre><code class="language-bash">$ grep -rl &quot;https://rubygems.org&quot; /opt/vagrant/embedded/gems/ | xargs sudo sed -i 's/https\:\/\/rubygems.org/https\:\/\/ruby.taobao.org/g'
+$ grep -rl &quot;https://rubygems.org&quot; /opt/vagrant/embedded/gems/
+$ vagrant plugin install vagrant-vbguest
+</code></pre>
+
+<h2 id="导入provision好的devstack-box">导入provision好的devstack box</h2>
+
+<p>安装配置sftp server，用于传输文件，也可以用其它方式。</p>
+
+<pre><code class="language-bash">$ sudo apt-get install openssh-server
+$ sudo addgroup sftp-users
+$ sudo adduser alice
+$ sudo usermod -G sftp-users -s /bin/false alice
+$ sudo addgroup ssh-users
+$ sudo usermod -a -G ssh-users jinpeng
+$ sudo mkdir /home/sftp_root
+$ sudo mkdir /home/sftp_root/shared
+$ sudo chown jinpeng:sftp-users /home/sftp_root/shared
+$ sudo chmod 770 /home/sftp_root/shared
+$ sudo vi /etc/ssh/sshd_config 
+$ sudo reboot now
+</code></pre>
+
+<p>其中在sshd_config中最后面添加以下内容：</p>
+
+<pre><code>AllowGroups ssh-users sftp-users
+Match Group sftp-users
+    ChrootDirectory /home/sftp_root
+    AllowTcpForwarding no
+    X11Forwarding no
+    ForceCommand internal-sftp
+</code></pre>
+
+<p>生成ssh key，在devstack的Vagranfile中使用到：</p>
+
+<pre><code class="language-bash">$ mkdir ~/.ssh
+$ ssh-keygen
+</code></pre>
+
+<p>安装NFS服务：</p>
+
+<pre><code class="language-bash">$ sudo apt-get install nfs-common nfs-kernel-server
+</code></pre>
+
+<p>导入provision好的devstack box:</p>
+
+<pre><code class="language-bash">$ vagrant box add dogwood-devstack-provisioned ~/Download/devstack_mac.box
+</code></pre>
+
+<h2 id="启动虚拟机">启动虚拟机</h2>
+
+<p>启动虚拟机：</p>
+
+<pre><code class="language-bash">$ mkdir ~/openedx
+$ cd openedx
+$ git clone https://github.com/jinpeng/openedx/devstack
+$ cd devstack
+$ vagrant up
+</code></pre>
+
+<p>如果遇到ssh authentication问题：</p>
+
+<pre><code class="language-bash">$ ssh-copy-id vagrant@192.168.33.10
+$ vagrant reload
+</code></pre>
+
+<h2 id="解决googleapis的问题">解决googleapis的问题</h2>
+
+<p>由于众所周知的原因，open edX用到的fonts.googleapis.com，ajax.googleapis.com等</p>
+
+<pre><code class="language-bash">$ cd ~/openedx/devstack
+$ grep -rl &quot;ajax.googleapis.com&quot; edx-platform | xargs sudo sed -i 's/ajax.googleapis.com/ajax.useso.com/g'
+$ vagrant ssh
+$ sudo vi /edx/app/edxapp/venvs/edxapp/lib/python2.7/site-packages/debug_toolbar/settings.py
+</code></pre>
+
+<h2 id="启动studio">启动Studio</h2>
+
+<pre><code class="language-bash">$ cd ~/openedx/devstack
+$ vagrant ssh
+$ sudo su edxapp
+$ paver devstack studio
+</code></pre>
+
+<p>在host上打开浏览器，访问：<br />
+<a href="http://192.168.33.10:8001/">http://192.168.33.10:8001/</a><br />
+可以看到studio的登录界面，用预置账户staff@example.com / edx登录。</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

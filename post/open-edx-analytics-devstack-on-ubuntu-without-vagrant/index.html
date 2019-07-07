@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Open edX Analytics devstack on Ubuntu without Vagrant // Jinpeng&#39;s Blog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Dong Jinpeng" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://jinpeng.github.com/css/main.min.59023e5fd38d6ecb0e1dfbb295077c3c67e00e3b9eb3feaf34b5a5e6b332897a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Open edX Analytics devstack on Ubuntu without Vagrant"/>
+<meta name="twitter:description" content=" Open edX Analytics devstack on Ubuntu without Vagrant $ ssh root@123.56.40.252 # adduser ubuntu # chmod &#43;w /etc/sudoers # vim /etc/sudoers  Add following line into the file:
+ubuntu ALL=(ALL:ALL) ALL  Make it looks like:
+... # User privilege specification root ALL=(ALL:ALL) ALL ubuntu ALL=(ALL:ALL) ALL ...  # chmod -w /etc/sudoers # su - ubuntu $ git clone https://github.com/edx/edx-analytics-pipeline $ cd edx-analytics-pipeline $ source venv/bin/activate (venv)$ make bootstrap  "/>
+
+    <meta property="og:title" content="Open edX Analytics devstack on Ubuntu without Vagrant" />
+<meta property="og:description" content=" Open edX Analytics devstack on Ubuntu without Vagrant $ ssh root@123.56.40.252 # adduser ubuntu # chmod &#43;w /etc/sudoers # vim /etc/sudoers  Add following line into the file:
+ubuntu ALL=(ALL:ALL) ALL  Make it looks like:
+... # User privilege specification root ALL=(ALL:ALL) ALL ubuntu ALL=(ALL:ALL) ALL ...  # chmod -w /etc/sudoers # su - ubuntu $ git clone https://github.com/edx/edx-analytics-pipeline $ cd edx-analytics-pipeline $ source venv/bin/activate (venv)$ make bootstrap  " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinpeng.github.com/post/open-edx-analytics-devstack-on-ubuntu-without-vagrant/" />
+<meta property="article:published_time" content="2016-04-28T16:32:04&#43;00:00"/>
+<meta property="article:modified_time" content="2016-04-28T16:32:04&#43;00:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://jinpeng.github.com/"><img class="app-header-avatar" src="http://pu9o1rel6.bkt.clouddn.com/cartoon_avatar.jpg" alt="Dong Jinpeng" /></a>
+      <h1>Jinpeng&#39;s Blog</h1>
+      <p>An old programmer keeps learning new techniques.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/jinpeng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+      
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Open edX Analytics devstack on Ubuntu without Vagrant</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Apr 28, 2016
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h2 id="open-edx-analytics-devstack-on-ubuntu-without-vagrant">Open edX Analytics devstack on Ubuntu without Vagrant</h2>
+
+<pre><code class="language-bash">$ ssh root@123.56.40.252
+# adduser ubuntu
+# chmod +w /etc/sudoers
+# vim /etc/sudoers
+</code></pre>
+
+<p>Add following line into the file:</p>
+
+<pre><code>ubuntu  ALL=(ALL:ALL) ALL
+</code></pre>
+
+<p>Make it looks like:</p>
+
+<pre><code>...
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+ubuntu  ALL=(ALL:ALL) ALL
+...
+</code></pre>
+
+<pre><code># chmod -w /etc/sudoers
+# su - ubuntu
+$ git clone https://github.com/edx/edx-analytics-pipeline
+$ cd edx-analytics-pipeline
+$ source venv/bin/activate
+(venv)$ make bootstrap
+</code></pre>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

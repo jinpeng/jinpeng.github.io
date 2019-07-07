@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jinpeng&#39;s Blog</title>
+    <link>https://jinpeng.github.com/</link>
+    <description>Recent content on Jinpeng&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 18 May 2018 17:26:19 +0000</lastBuildDate>
+    
+	<atom:link href="https://jinpeng.github.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Limit GPU memory usage in Keras with Tensorflow Backend</title>
+      <link>https://jinpeng.github.com/post/limit-gpu-memory-usage-in-keras-with-tensorflow-backend/</link>
+      <pubDate>Fri, 18 May 2018 17:26:19 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/limit-gpu-memory-usage-in-keras-with-tensorflow-backend/</guid>
+      <description>问题： 我使用Keras 2.1.6和Tensorflow 1.8.0做一个OCR实验，这个OCR分为两步，第一步Text Localization没有使用Keras，直接使用Tensorflow实现的网络，单独运行正常；第二步Text Recognition使用Keras实现的另一个网络，执行时出现了Out of Memory的警告：
+2018-05-18 17:01:53.022692: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11264 MB memory) -&amp;gt; physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:01:00.0, compute capability: 6.1) 2018-05-18 17:01:53.028636: E T:\src\github\tensorflow\tensorflow\stream_executor\cuda\cuda_driver.cc:936] failed to allocate 11.00G (11811160064 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY 2018-05-18 17:01:53.031124: E T:\src\github\tensorflow\tensorflow\stream_executor\cuda\cuda_driver.cc:936] failed to allocate 9.90G (10630043648 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY  最后Python进程挂起，并且出现以下错误，创建cudnn handle失败：
+2018-05-18 16:47:14.594352: E T:\src\github\tensorflow\tensorflow\stream_executor\cuda\cuda_dnn.</description>
+    </item>
+    
+    <item>
+      <title>Regular Expression</title>
+      <link>https://jinpeng.github.com/post/regular-expression/</link>
+      <pubDate>Wed, 09 May 2018 08:37:21 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/regular-expression/</guid>
+      <description>Regular Expression 1966年，基于pattern的早期NLP系统ELIZA，可以和人进行简单的对话，并且有人认为ELIZA真的可以理解他。在ELIZA和后来的一些给予pattern的chatbots系统中，以及其他很多NLP任务中，正则表达式（regular expression）都是一个基本的但重要的工具。例如：信息抽取（information extraction），包括现在的很多爬虫，需要采集特定信息，也会使用正则表达式与XPath、CSS selector等一起使用，从爬取的网页里抽取信息；还有一些日历应用，可以从email、短信、IM消息、社交网络等文本中抽取时间、地点、事件等信息，自动添加到日历中。又例如：文本正则化（text normalization），需要对文本进行tokenization，对于中文要分词，对于英文也需要识别被空格分隔的几部分组成的词，还需要把缩写展开，识别表情符号（emoji）或者twitter的hashtag等；文本正则化还包括词形还原（lemmatization）或者简化版词形还原——词干提取（stemming），后者常用于搜索索引。
+正则表达式（regular expression）是用于描述字符串集合的一种代数符号（algebraic notations），常用于在文档集中检索符合特定模式的文本。比如：Unix命令grep就是使用正则表达式进行文本检索的常用工具。
+####基本模式
+简单字符序列，例如：/Bufferfly/，匹配完整的字符串，匹配是大小写敏感的。
+方括号[]是一种disjunction，例如：/[Ww]/匹配的是大写或者小写w；/[0123456789]/匹配的是任意单个数字（digit）。
+使用范围（range）可以简化一些定义明确序列的字符disjunction，例如：/[0-9]/相当于/[0123456789]/，/[A-D]/相当于/[ABCD]/。
+否定符号（^），在方括号内，当^紧跟在左方括号后面时，表示否定（negation），匹配的是与后面的字符串不相同的字符。例如：/[^A-Z]/表示非大写字母。但当^不是紧跟在左方括号后面时，只表示^字符本身。
+通配符（.），表示任意字符，当要表示period字符本身时，需要前置转义符号（\），例如：/[.A]/表示period或者大写A。
+可选符号（?）是一种计数器，表示它前面的字符是可选的，出现的次数是0或者1。例如：/colou?r/可以匹配color或者colour两种拼写方法，其中的?修饰的是字符u。
+Kleene *（读作&amp;rdquo;cleany star&amp;rdquo;）也是计数器，表示它前面的字符出现次数是0或者n，n是正整数。例如：/oo*h/可以匹配oh, ooh, oooh&amp;hellip;
+Kleene + （读作&amp;rdquo;cleany plus&amp;rdquo;）也是计数器，表示它前面的字符出现次数是1或者n，n是正整数。例如：/[0-9]+/匹配数字序列。
+锚点（anchor）用于定位字符串，^表示行首，$表示行尾，\b匹配词边界，\B匹配无边界。例如：/^The dong\.\$/完全匹配字符串&amp;rdquo;The dog.&amp;ldquo;的行；/\bthe\b/匹配&amp;rdquo;the&amp;rdquo;，但不匹配&amp;rdquo;other&amp;rdquo;。其中词的含义是编程语言的含义，由数字、字母和下划线组成的序列，而不是英语中的单词。比如：/\b99\b/匹配&amp;rdquo;There are 99 bottles.&amp;ldquo;和&amp;rdquo;\$99&amp;rdquo;，但不匹配&amp;rdquo;There are 299 bottles.&amp;rdquo;
+Disjunction, Grouping and Precednece Disjunction，除了方括号，pipe符号（|）是另一种disjunction符号。例如：/cat|dog/匹配包含&amp;rdquo;cat&amp;rdquo;或者&amp;rdquo;dog&amp;rdquo;的字符串。
+优先级（precedence），作为代数符号，正则表达式也有不同的优先级。比如：简单字符序列优先级高于pipe符号，因此/cat|dog/匹配的是包含&amp;rdquo;cat&amp;rdquo;或者&amp;rdquo;dog&amp;rdquo;的字符串，而不是包含&amp;rdquo;catog&amp;rdquo;或者&amp;rdquo;cadog&amp;rdquo;的字符串。使用括号（parenthesis）可以改变优先级，比如：/gupp(y|ies)/可以匹配&amp;rdquo;guppy&amp;rdquo;或者&amp;rdquo;guppies&amp;rdquo;。对于计数器，其优先级也低于简单序列，因此有时候也需要使用括号来改变优先级，比如：/(Column [0-9]+ *)*/。
+操作符优先层级（operator precedence hierarchy）:
+   name symbol     Parenthesis ()   Counters * + ? {}   Sequences and anchors the ^ $   Disjunction |    贪婪（greedy）和不贪婪（non-greedy），正则表达式匹配有多种可能性，特别是有Kleene计数器的情况下，匹配最长的字符串称为贪婪模式，不贪婪模式则匹配最短的字符串。在Kleene star和Kleene plus后面加?</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Hexo</title>
+      <link>https://jinpeng.github.com/post/upgrade-hexo/</link>
+      <pubDate>Tue, 24 Apr 2018 13:33:03 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/upgrade-hexo/</guid>
+      <description>Why Upgrade Hexo 在使用hexo和github pages的过程中，经常出现hexo-cli报错，很早就想重新做一下开发环境，甚至想要换成其他的博客生成器，比如：Hugo。然而，另起炉灶总是要花费更多的时间，所以决定还是升级一下Hexo。 之前尝试重做环境遇到了很多坑，因此决定另选吉地，重新开始。
+Let&amp;rsquo;s Do It 首先，升级hexo：
+$ npm i hexo-cli -g $ hexo version hexo: 3.7.1 hexo-cli: 1.1.0 os: Darwin 17.5.0 darwin x64 http_parser: 2.8.0 node: 9.10.1 v8: 6.2.414.46-node.23 uv: 1.19.2 zlib: 1.2.11 ares: 1.13.0 modules: 59 nghttp2: 1.29.0 napi: 2 openssl: 1.0.2o icu: 61.1 unicode: 10.0 cldr: 33.0 tz: 2018c  其次，在新的目录下创建blog site：
+$ hexo init jinpeng.github.io $ cd jinpeng.github.io $ npm i $ hexo s  打开浏览器访问：http://localhost:4000/，即可看到新建的博客。</description>
+    </item>
+    
+    <item>
+      <title>Math for Deep Learning Linear Algebra</title>
+      <link>https://jinpeng.github.com/post/math-for-deep-learning-linear-algebra/</link>
+      <pubDate>Wed, 23 Aug 2017 13:56:38 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/math-for-deep-learning-linear-algebra/</guid>
+      <description>Math for Deep Learning: Linear Algebra Scalar, Vector, Matrix and Tensor Scalar:</description>
+    </item>
+    
+    <item>
+      <title>Install WebRTC/AppRTC Server</title>
+      <link>https://jinpeng.github.com/post/install-webrtc-apprtc-server/</link>
+      <pubDate>Thu, 29 Sep 2016 17:30:31 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/install-webrtc-apprtc-server/</guid>
+      <description>Environment: Aliyun HK ECS instance, Ubuntu 14.04, Golang, NodeJS installed.
+Us domain mydomain.com, IP address xxx.xxx.xxx.xxx.
+Install TURN (Traversal Using Relays around NAT server) $ cd ~/webrtc $ wget http://turnserver.open-sys.org/downloads/v4.4.5.3/turnserver-4.4.5.3-debian-wheezy-ubuntu-mint-x86-64bits.tar.gz $ tar xvfz turnserver-4.4.5.3-debian-wheezy-ubuntu-mint-x86-64bits.tar.gz $ sudo apt-get update $ sudo apt-get install gdebi-core $ sudo gdebi coturn*.deb $ vim /etc/default/coturn  Uncomment the following line:
+TURNSERVER_ENABLED=1  $ sudo openssl req -x509 -newkey rsa:2048 -keyout /etc/turn_server_pkey.pem -out /etc/turn_server_cert.pem -days 99999 -nodes $ vim /etc/turnserver.</description>
+    </item>
+    
+    <item>
+      <title>Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating</title>
+      <link>https://jinpeng.github.com/post/install-tensorflow-on-ubuntu-16-04-with-nvidia-gpu-accelerating/</link>
+      <pubDate>Fri, 19 Aug 2016 15:04:00 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/install-tensorflow-on-ubuntu-16-04-with-nvidia-gpu-accelerating/</guid>
+      <description>Install Tensorflow on Ubuntu 16.04 with NVidia GPU accelerating Hardware: Lenovo T450, CPU i7-5500U CPU @ 2.40GHz, Graphics Card GeForce 940m.
+Install Virtualenv $ sudo apt-get install python-pip python-dev python-virtualenv $ makedir ~/env $ virtualenv --system-site-packages ~/env/tensorflow $ printf &#39;\nalias tensorflow=&amp;quot;source ~/env/tensorflow/bin/activate&amp;quot;&#39; &amp;gt;&amp;gt; ~/.bashrc $ source ~/.bashrc $ tensorflow (tensorflow)$ deactivate  Install Other Dependencies $ sudo apt-get install python-numpy python-wheel python-imaging swig  Install JDK (Bazel dependency) $ sudo apt-get install software-properties-common $ sudo add-apt-repository ppa:webupd8team/java $ sudo apt-get update $ sudo apt-get install oracle-java8-installer $ java -version java version &amp;quot;1.</description>
+    </item>
+    
+    <item>
+      <title>Python debug with PDB</title>
+      <link>https://jinpeng.github.com/post/python-debug-with-pdb/</link>
+      <pubDate>Wed, 01 Jun 2016 18:18:18 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/python-debug-with-pdb/</guid>
+      <description>PDB调试启动方式  对于从命令行运行的程序  $ python -m pdb myscript.py   对于较为复杂大型程序或者需要特殊脚本启动的程序  在感兴趣的代码中插入：
+import pdb pdb.set_trace()  然后用原有的方式启动，程序运行到代码段会进入PDB调试状态
+ 在Python REPL中调试  &amp;gt;&amp;gt;&amp;gt; import pdb &amp;gt;&amp;gt;&amp;gt; import mymodule &amp;gt;&amp;gt;&amp;gt; pdb.run(&#39;mymodule.test()&#39;)  常用PDB命令  帮助命令
+(Pdb) h Documented commands (type help &amp;lt;topic&amp;gt;): ======================================== EOF bt cont enable jump pp run unt a c continue exit l q s until alias cl d h list quit step up args clear debug help n r tbreak w b commands disable ignore next restart u whatis break condition down j p return unalias where Miscellaneous help topics: ========================== exec pdb Undocumented commands: ====================== retval rv  查看当前代码片段</description>
+    </item>
+    
+    <item>
+      <title>Open edX Analytics devstack on Ubuntu without Vagrant</title>
+      <link>https://jinpeng.github.com/post/open-edx-analytics-devstack-on-ubuntu-without-vagrant/</link>
+      <pubDate>Thu, 28 Apr 2016 16:32:04 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/open-edx-analytics-devstack-on-ubuntu-without-vagrant/</guid>
+      <description> Open edX Analytics devstack on Ubuntu without Vagrant $ ssh root@123.56.40.252 # adduser ubuntu # chmod +w /etc/sudoers # vim /etc/sudoers  Add following line into the file:
+ubuntu ALL=(ALL:ALL) ALL  Make it looks like:
+... # User privilege specification root ALL=(ALL:ALL) ALL ubuntu ALL=(ALL:ALL) ALL ...  # chmod -w /etc/sudoers # su - ubuntu $ git clone https://github.com/edx/edx-analytics-pipeline $ cd edx-analytics-pipeline $ source venv/bin/activate (venv)$ make bootstrap  </description>
+    </item>
+    
+    <item>
+      <title>Open edX devstack on Ubuntu without Vagrant</title>
+      <link>https://jinpeng.github.com/post/open-edx-devstack-on-ubuntu-without-vagrant/</link>
+      <pubDate>Thu, 21 Apr 2016 18:21:33 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/open-edx-devstack-on-ubuntu-without-vagrant/</guid>
+      <description>Install open edX devstack on Ubuntu 14.04 directly Launch EC2 instance with 2 vCPUs 4G memory
+$ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211 $ sudo apt-get update -y $ sudo apt-get upgrade -y $ sudo reboot  $ ssh -i .ssh/aws-es.pem ubuntu@54.199.222.211 $ export OPENEDX_RELEASE=named-release/dogwood $ wget https://raw.githubusercontent.com/edx/configuration/master/util/install/ansible-bootstrap.sh $ chmod +x ansible-bootstrap.sh $ sudo ./ansible-bootstrap.sh $ grep -rl &amp;quot;vagrant&amp;quot; /edx/app/edx_ansible/edx_ansible/playbooks/roles/local_dev/ $ grep -rl &amp;quot;vagrant&amp;quot; /edx/app/edx_ansible/edx_ansible/playbooks/roles/local_dev/ | xargs sudo sed -i &#39;s/vagrant/ubuntu/g&#39; $ sudo sed -i &#39;/edxapp_user: edxapp/ a\edxapp_ruby_version: &amp;quot;1.</description>
+    </item>
+    
+    <item>
+      <title>Install Magento 1.9.x on Ubuntu</title>
+      <link>https://jinpeng.github.com/post/install-magento-1-9-x-on-ubuntu/</link>
+      <pubDate>Thu, 21 Apr 2016 18:07:01 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/install-magento-1-9-x-on-ubuntu/</guid>
+      <description>##Install Magento 1.9.x on Aliyun##
+###Environment###
+Aliyun, Ubuntu 14.04LTS, 101.200.167.187
+###Install LNMP###
+$ ssh root@101.200.167.187 # wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz # tar zxf lnmp1.2-full.tar.gz # cd lnmp1.2-full # vim include/mysql.sh  Add InnoDB engine to MySQL installation script:
+-DWITH_INNOBASE_STORAGE_ENGINE=1  Please notice the section, looks like:
+Install_MySQL_56() { ... cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_READLINE=1 -DWITH_SSL=bundled -DWITH_ZLIB=system -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 ${MySQL55MAOpt} ... }  # ./install.sh lnmp  MySQL root password: xxxxx MySQL 5.</description>
+    </item>
+    
+    <item>
+      <title>桃花庵歌</title>
+      <link>https://jinpeng.github.com/post/%E6%A1%83%E8%8A%B1%E5%BA%B5%E6%AD%8C/</link>
+      <pubDate>Thu, 21 Apr 2016 17:49:53 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/%E6%A1%83%E8%8A%B1%E5%BA%B5%E6%AD%8C/</guid>
+      <description>桃花庵歌 桃花坞里桃花庵，桃花庵下桃花仙
+桃花仙人种桃树，又折花枝当酒钱
+酒醒只在花前坐，酒醉还须花下眠
+花前花后日复日，酒醉酒醒年复年
+不愿鞠躬车马前，但愿老死花酒间
+车尘马足贵者趣，酒盏花枝贫者缘
+若将富贵比贫贱，一在平地一在天
+若将贫贱比车马，他得驱驰我得闲
+世人笑我忒疯癫，我笑世人看不穿
+记得五陵豪杰墓，无花无酒锄作田</description>
+    </item>
+    
+    <item>
+      <title>Open edX devstack on Ubuntu host</title>
+      <link>https://jinpeng.github.com/post/open-edx-devstack-on-ubuntu-host/</link>
+      <pubDate>Thu, 21 Apr 2016 17:47:25 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/open-edx-devstack-on-ubuntu-host/</guid>
+      <description>Open edX Devstack Ubuntu host 安装环境，Ubuntu 14.04 LTS Desktop，ThinkPad T450.
+安装VirtualBox和Vagrant $ sudo vi /etc/apt/sources.list  在文档最后添加VirtualBox源：
+deb http://download.virtualbox.org/virtualbox/debian trusty contrib  $ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add - $ sudo apt-get update $ sudo apt-get install virtualbox-5.0  $ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb $ sudo dpkg -i vagrant_1.8.1_x86_64.deb  安装Vagrant plugins，vagrant-vbguest等。
+修改Vagrant所用Ruby gems服务器为淘宝的镜像：
+$ grep -rl &amp;quot;https://rubygems.org&amp;quot; /opt/vagrant/embedded/gems/ | xargs sudo sed -i &#39;s/https\:\/\/rubygems.org/https\:\/\/ruby.taobao.org/g&#39; $ grep -rl &amp;quot;https://rubygems.</description>
+    </item>
+    
+    <item>
+      <title>Go Programming Lanauges Reading Notes Chapter 1</title>
+      <link>https://jinpeng.github.com/post/go-programming-lanauges-reading-notes-chapter-1/</link>
+      <pubDate>Thu, 17 Dec 2015 10:32:52 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/go-programming-lanauges-reading-notes-chapter-1/</guid>
+      <description>Tutorial 1.1 Hellow, World  Go is compiled language, go toolchain convert source code into native machine instructions. go command, and its subcommands: run, build, get Go source code file structure: package, imports, declarations of functions, variables, constants and types. Go code is organized into packages. Standard library has more than 100 packages. Package main is a special package for standalone executable program. Import exactly the packages needed. Function declaration: func NAME PARAM_LIST RETURN_LIST.</description>
+    </item>
+    
+    <item>
+      <title>Greek Alphabet</title>
+      <link>https://jinpeng.github.com/post/greek-alphabet/</link>
+      <pubDate>Fri, 28 Aug 2015 18:08:25 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/greek-alphabet/</guid>
+      <description>希腊字母表
+   Greek letter Name Equivalent Sound     $A$ $\alpha$ alpha A al-fah   $B$ $\beta$ beta B bay-tah   $\Gamma$ $\gamma$ gamma G gam-ah   $\Delta$ $\delta$ delta D del-tah   $E$ $\epsilon$ epsilon E ep-si-lon   $Z$ $\zeta$ zeta Z zay-tah   $H$ $\eta$ eta H ay-tah   $\Theta$ $\theta$ theta Th thay-tah   $I$ $\iota$ iota I eye-o-tah   $K$ $\kappa$ kappa K cap-ah   $\Lambda$ $\lambda$ lambda L lamb-dah   $M$ $\mu$ mu M mew   $N$ $\nu$ nu N new   $\Xi$ $\xi$ xi X zzEye   $O$ $\omicron$ omicron O om-ah-cron   $\Pi$ $\pi$ pi P pie   $\Sigma$ $\sigma$ sigma S sig-ma   $T$ $\tau$ tau T tawh   $\Upsilon$ $\upsilon$ upsilon U oop-si-lon   $\Phi$ $\phi$ phi Ph figh or fie   $X$ $\chi$ chi Ch kigh   $\Psi$ $\psi$ psi Ps sigh   $\Omega$ $\omega$ omega O o-may-gah    </description>
+    </item>
+    
+    <item>
+      <title>Hello World</title>
+      <link>https://jinpeng.github.com/post/hello-world/</link>
+      <pubDate>Fri, 28 Aug 2015 17:18:18 +0000</pubDate>
+      
+      <guid>https://jinpeng.github.com/post/hello-world/</guid>
+      <description>Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+Quick Start Create a new post $ hexo new &amp;quot;My New Post&amp;quot;  More info: Writing
+Run server $ hexo server  More info: Server
+Generate static files $ hexo generate  More info: Generating</description>
+    </item>
+    
+  </channel>
+</rss>
