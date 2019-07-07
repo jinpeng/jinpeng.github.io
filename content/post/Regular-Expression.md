@@ -4,13 +4,11 @@ date: 2018-05-09 08:37:21
 tags:
 ---
 
-# Regular Expression
-
 1966年，基于pattern的早期NLP系统ELIZA，可以和人进行简单的对话，并且有人认为ELIZA真的可以理解他。在ELIZA和后来的一些给予pattern的chatbots系统中，以及其他很多NLP任务中，正则表达式（regular expression）都是一个基本的但重要的工具。例如：信息抽取（information extraction），包括现在的很多爬虫，需要采集特定信息，也会使用正则表达式与XPath、CSS selector等一起使用，从爬取的网页里抽取信息；还有一些日历应用，可以从email、短信、IM消息、社交网络等文本中抽取时间、地点、事件等信息，自动添加到日历中。又例如：文本正则化（text normalization），需要对文本进行tokenization，对于中文要分词，对于英文也需要识别被空格分隔的几部分组成的词，还需要把缩写展开，识别表情符号（emoji）或者twitter的hashtag等；文本正则化还包括词形还原（lemmatization）或者简化版词形还原——词干提取（stemming），后者常用于搜索索引。
 
 正则表达式（regular expression）是用于描述字符串集合的一种代数符号（algebraic notations），常用于在文档集中检索符合特定模式的文本。比如：Unix命令grep就是使用正则表达式进行文本检索的常用工具。
 
-####基本模式
+#### 基本模式
 
 简单字符序列，例如：/Bufferfly/，匹配完整的字符串，匹配是大小写敏感的。
 
@@ -47,7 +45,7 @@ Disjunction，除了方括号，pipe符号（|）是另一种disjunction符号�
 
 贪婪（greedy）和不贪婪（non-greedy），正则表达式匹配有多种可能性，特别是有Kleene计数器的情况下，匹配最长的字符串称为贪婪模式，不贪婪模式则匹配最短的字符串。在Kleene star和Kleene plus后面加?，可以表示不贪婪匹配：*?或者+?。
 
-####Precision and recall
+#### Precision and recall
 
 编写正则表达式主要解决不改被匹配的字符串（False Positive）和漏掉没匹配的字符串（False Negative）两类问题，提高precision和recall。
 $$
